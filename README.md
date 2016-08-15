@@ -10,7 +10,7 @@ Please note that currently the dependency trees are not returned.
 Once started, make a POST request:
 
 ```
-curl http://localhost:5000/api -d "text:This is a text that I want to be analyzed. " -X POST
+curl http://localhost:5000/api -d "text:This is a text that I want to be analyzed." -X POST
 ```
 
 You'll receive a JSON in return:
@@ -42,4 +42,16 @@ TOKEN: {
   'num': IS_NUM,
   'pos': POS
 }
+```
+
+## Installation
+```
+docker pull jgontrum/spacyapi:en
+or
+docker pull jgontrum/spacyapi:de
+```
+
+## Start
+```
+docker start -d -p 127.0.0.1:5000:5000 jgontrum/spacyapi:en
 ```
