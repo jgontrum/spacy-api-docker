@@ -45,13 +45,41 @@ TOKEN: {
 ```
 
 ## Installation
+### Docker
 ```
 docker pull jgontrum/spacyapi:en
 or
 docker pull jgontrum/spacyapi:de
 ```
+### Local
+```
+pip install -r requirements.txt
+
+python -m spacy.en.download
+or
+python -m spacy.de.download
+```
 
 ## Start
+### Docker
 ```
 docker start -d -p 127.0.0.1:5000:5000 jgontrum/spacyapi:en
+```
+### Local
+```
+LANG=en python server.py
+or
+LANG=de python server.py
+```
+
+## Example
+### Request
+```
+curl...
+```
+
+### Response
+```
+{
+}
 ```
