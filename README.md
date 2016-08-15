@@ -67,5 +67,19 @@ docker start -d -p 127.0.0.1:5000:5000 jgontrum/spacyapi:en
 ```
 ### Local
 ```
-python server.py
+LANG=en python server.py
+or
+LANG=de python server.py
+```
+
+## Example
+### Request
+```
+curl...
+```
+
+### Response
+```
+{
+}
 ```
