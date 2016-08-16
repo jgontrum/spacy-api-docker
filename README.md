@@ -17,8 +17,8 @@ You'll receive a JSON in return:
 
 ```
 {
-  'sentences': LIST_OF_SENTENCES => LIST_OF_TOKENS
-  'performance': CALCULATION_TIME_IN_MS,
+  'sentences': [[TOKEN, TOKEN, ...], [TOKEN, TOKEN, ...], ...],
+  'performance': CALCULATION_TIME_IN_SEC,
   'version': SPACY_VERSION,
   'numOfSentences': NUM_OF_SENTENCES,
   'numOfTokens': NUM_OF_TOKENS
