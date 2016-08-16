@@ -60,10 +60,10 @@ or
 python -m spacy.de.download
 ```
 
-## Start
+## Run
 ### Docker
 ```
-docker start -d -p 127.0.0.1:5000:5000 jgontrum/spacyapi:en
+docker run --name spacyapi -d -p 127.0.0.1:5000:5000 jgontrum/spacyapi:en
 ```
 ### Local
 ```
