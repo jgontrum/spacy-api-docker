@@ -1,8 +1,6 @@
 FROM debian:wheezy
 MAINTAINER Johannes Gontrum <https://github.com/jgontrum>
 
-ENV LANG en
-
 RUN mkdir -p /usr/spacyapi
 COPY . /usr/spacyapi/
 
@@ -12,6 +10,10 @@ RUN easy_install pip
 RUN pip install --upgrade pip setuptools
 
 RUN pip install -r /usr/spacyapi/requirements.txt
+
+ENV LANG en
+EXPOSE 5000
+
 RUN python -m spacy.${LANG}.download
 
 ENTRYPOINT cd /usr/spacyapi && python server.py
