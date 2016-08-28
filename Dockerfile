@@ -1,6 +1,6 @@
 FROM debian:jessie
 MAINTAINER Johannes Gontrum <https://github.com/jgontrum>
-ENV LANG en
+ENV LANG de
 
 RUN mkdir -p /usr/spacyapi
 COPY . /usr/spacyapi/
@@ -16,4 +16,4 @@ RUN python -m spacy.${LANG}.download
 
 ENTRYPOINT cd /usr/spacyapi && python server.py
 
-XPOSE 5000
+EXPOSE 5000
