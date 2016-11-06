@@ -81,9 +81,9 @@ docker run --name spacyapi -d -p 127.0.0.1:5000:5000 jgontrum/spacyapi:en
 ```
 ### Local
 ```
-LANG=en python server.py
+make run-en
 or
-LANG=de python server.py
+make run-de
 ```
 
 ## Example
