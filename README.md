@@ -5,12 +5,18 @@ Supports the English and German language models and returns the analysis structu
 
 Please note that currently the dependency trees are not returned.
 
+## New in version 0.2
+- Updated to spaCy 1.2.0
+- Support for batch processing of multiple texts
+- Certain token data can now be enabled/disabled
+- Added Makefile to easily run the API outside of Docker
+- To save space and increase start-up time, we do not download the word vectors
+- API port can be changed via a environmental variable ('PORT')
+
 ## Usage
 
-Once started, make a POST request:
-
 ```
-curl http://localhost:5000/api -d "text=This is a text that I want to be analyzed." -X POST
+curl http://localhost:5000/api --header 'content-type: application/json' --data '{text: "This is a text that I want to be analyzed."}' -X POST
 ```
 
 You'll receive a JSON in return:
@@ -44,6 +50,16 @@ TOKEN: {
 }
 ```
 
+### API fields
+
+Field | Explanation
+------|------------
+text  | One text to be analyzed
+texts | List of texts to be analyzed
+fields| Optional. A list of token data fields that should be analyzed. Example: ['pos', 'token']
+
+Either 'text' or 'texts' is required.
+
 ## Installation
 ### Docker
 ```
@@ -53,11 +69,9 @@ docker pull jgontrum/spacyapi:de
 ```
 ### Local
 ```
-pip install -r requirements.txt
-
-python -m spacy.en.download
+make english
 or
-python -m spacy.de.download
+make german
 ```
 
 ## Run
@@ -73,12 +87,13 @@ LANG=de python server.py
 ```
 
 ## Example
-### Request
+### Simple
+#### Request
 ```
 curl http://localhost:5000/api -d "text=Das hier ist Peter. Peter ist eine Person." -X POST
 ```
 
-### Response
+#### Response
 ```
 {
   "performance": 0.0042879581451416016,
@@ -251,5 +266,92 @@ curl http://localhost:5000/api -d "text=Das hier ist Peter. Peter ist eine Perso
       }
     ]
   ]
+}
+```
+
+### Multiple texts & selected fields
+#### Request
+```
+curl --request POST \
+  --url http://localhost:5000/api \
+  --header 'content-type: application/json' \
+  --data '{
+	"texts": ["Here comes Peter.", "And so does Mary."],
+	"fields": ["pos", "token", "lemma"]
+}'
+```
+#### Response
+```
+{
+	"numberOfTexts": 2,
+	"performance": [
+		0.003515958786010742
+	],
+	"version": "1.2.0",
+	"texts": [
+		{
+			"numOfSentences": 1,
+			"sentences": [
+				[
+					{
+						"token": "Here",
+						"pos": "ADV",
+						"lemma": "here"
+					},
+					{
+						"token": "comes",
+						"pos": "VERB",
+						"lemma": "come"
+					},
+					{
+						"token": "Peter",
+						"pos": "PROPN",
+						"lemma": "peter"
+					},
+					{
+						"token": ".",
+						"pos": "PUNCT",
+						"lemma": "."
+					}
+				]
+			],
+			"numOfTokens": 4
+		},
+		{
+			"numOfSentences": 1,
+			"sentences": [
+				[
+					{
+						"token": "And",
+						"pos": "CONJ",
+						"lemma": "and"
+					},
+					{
+						"token": "so",
+						"pos": "ADV",
+						"lemma": "so"
+					},
+					{
+						"token": "does",
+						"pos": "VERB",
+						"lemma": "do"
+					},
+					{
+						"token": "Mary",
+						"pos": "PROPN",
+						"lemma": "mary"
+					},
+					{
+						"token": ".",
+						"pos": "PUNCT",
+						"lemma": "."
+					}
+				]
+			],
+			"numOfTokens": 5
+		}
+	],
+	"lang": "en",
+	"error": false
 }
 ```

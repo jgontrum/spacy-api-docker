@@ -12,7 +12,7 @@ print("Loading Language Model for '%s'..." % language)
 nlp = spacy.load(language)
 print("Language Model for '%s' loaded!" % language)
 
-app = Flask("Spacy API")
+app = Flask("spaCy API")
 api = Api(app)
 
 parser = reqparse.RequestParser()
@@ -35,7 +35,7 @@ class Spacy(Resource):
             return validation, 500
 
         ret = {
-            'version': '1.1.2',
+            'version': '1.2.0',
             'lang': language
         }
 

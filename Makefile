@@ -1,12 +1,22 @@
-.PHONY: clean english german
+.PHONY: clean english german run-de run-en
 
 all: english
 
-english: env
-	python -m spacy.en.download parser
+english: env/lib/python3.5/site-packages/spacy/data/en-1.1.0
 
-german: env
-	python -m spacy.de.download parser
+german: env/lib/python3.5/site-packages/spacy/data/de-1.0.0
+
+env/lib/python3.5/site-packages/spacy/data/en-1.1.0: env
+	env/bin/python -m spacy.en.download parser
+
+env/lib/python3.5/site-packages/spacy/data/de-1.0.0: env
+	env/bin/python -m spacy.de.download parser
+
+run-de:
+	LANG=de env/bin/python server.py
+
+run-en:
+	LANG=en env/bin/python server.py
 
 env:
 	virtualenv env -p python3.5 --no-site-packages
