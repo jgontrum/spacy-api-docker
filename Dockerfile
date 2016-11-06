@@ -17,4 +17,4 @@ RUN python -m spacy.${LANG}.download parser
 
 ENTRYPOINT cd /usr/spacyapi && python server.py
 
-EXPOSE PORT
+EXPOSE ${PORT}

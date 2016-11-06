@@ -16,7 +16,7 @@ python-dateutil==2.5.3
 pytz==2016.7
 semver==2.7.1
 six==1.10.0
-spacy==1.1.2
+spacy==1.2.0
 sputnik==0.9.3
 thinc==5.0.8
 ujson==1.35

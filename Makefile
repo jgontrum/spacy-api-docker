@@ -12,6 +12,7 @@ env:
 	virtualenv env -p python3.5 --no-site-packages
 	env/bin/pip install --upgrade pip
 	env/bin/pip install wheel
+	env/bin/pip install -r requirements.txt
 
 clean:
 	rm -rfv develop-eggs dist downloads eggs env parts 
