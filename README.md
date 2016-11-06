@@ -3,7 +3,7 @@
 Flask based REST API for spaCy, the great and fast NLP framework.
 Supports the English and German language models and returns the analysis structured by sentences and by token.
 
-Please note that currently the dependency trees are not returned.
+Please note that currently the dependency trees and word vectors are not being returned.
 
 ## New in version 0.2
 - Updated to spaCy 1.2.0
@@ -90,14 +90,14 @@ LANG=de python server.py
 ### Simple
 #### Request
 ```
-curl http://localhost:5000/api -d "text=Das hier ist Peter. Peter ist eine Person." -X POST
+curl http://localhost:5000/api --header 'content-type: application/json' --data '{text: "Das hier ist Peter. Peter ist eine Person."}' -X POST
 ```
 
 #### Response
 ```
 {
   "performance": 0.0042879581451416016,
-  "version": "0.101.0",
+  "version": "1.2.0",
   "numOfSentences": 2,
   "numOfTokens": 10,
   "sentences": [
