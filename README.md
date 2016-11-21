@@ -16,7 +16,7 @@ Please note that currently the dependency trees and word vectors are not being r
 ## Usage
 
 ```
-curl http://localhost:5000/api --header 'content-type: application/json' --data '{text: "This is a text that I want to be analyzed."}' -X POST
+curl http://localhost:5000/api --header 'content-type: application/json' --data '{"text": "This is a text that I want to be analyzed."}' -X POST
 ```
 
 You'll receive a JSON in return:
@@ -90,7 +90,7 @@ make run-de
 ### Simple
 #### Request
 ```
-curl http://localhost:5000/api --header 'content-type: application/json' --data '{text: "Das hier ist Peter. Peter ist eine Person."}' -X POST
+curl http://localhost:5000/api --header 'content-type: application/json' --data '{"text": "Das hier ist Peter. Peter ist eine Person."}' -X POST
 ```
 
 #### Response
