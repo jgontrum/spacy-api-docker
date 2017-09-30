@@ -1,0 +1,27 @@
+{
+  "name": "displacy-demo",
+  "version": "1.0.2",
+  "description": "An open-source NLP visualiser for the modern web",
+  "main": "index.jade",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/explosion/displacy.git"
+  },
+  "keywords": [
+    "nlp",
+    "visualizer",
+    "spacy"
+  ],
+  "author": "Ines Montani",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/explosion/displacy/issues"
+  },
+  "homepage": "https://github.com/explosion/displacy#readme",
+  "devDependencies": {
+    "harp": "^0.20.3"
+  }
+}

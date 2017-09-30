@@ -305,10 +305,3 @@ Example response:
 ]
 ```
 
-| Name | Type | Description |
-| --- | --- | --- |
-| `score` | float | similarity to query |
-| `key` | string | identifier string |
-| `text` | string | human-readable token |
-| `count` | integer | absolute frequency in training corpus |
-| `head` | string | head word in text |
