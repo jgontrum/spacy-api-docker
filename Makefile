@@ -3,7 +3,7 @@
 all: env/bin/python
 
 env/bin/python:
-	virtualenv env -p python3.6 --no-site-packages
+	python3.6 -m venv env
 	env/bin/pip install --upgrade pip
 	env/bin/pip install wheel
 	env/bin/pip install -r requirements.txt
@@ -20,3 +20,6 @@ clean:
 test: env/bin/python
 	languages=en env/bin/download_models
 	env/bin/py.test displacy_service_tests
+
+start: env/bin/python
+	env/bin/start_api

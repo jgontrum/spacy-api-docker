@@ -89,3 +89,4 @@ ENV/
 .ropeproject
 
 frontend/node_modules
+.DS_Store
