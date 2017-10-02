@@ -8,7 +8,7 @@ header.o-banner.o-form
     +input("Your sentence here...")#input
         +search#submit
 
-    +dropdown("radio", "model", "Model", { en: "English (v0.101.0)", de: "German (v0.101.0)" }, "en")
+    +dropdown("radio", "model", "Model", languages, default_language)
 
     +dropdown("checkbox", "settings", "Settings", { punctuation: "Collapse Punctuation", phrases: "Collapse Phrases" }, [ "punctuation", "phrases" ])
 
