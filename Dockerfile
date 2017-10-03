@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
     nginx &&\
     apt-get -q clean -y && rm -rf /var/lib/apt/lists/* && rm -f /var/cache/apt/*.bin
 
-# Install NVM and node for the frontend
+# Install node for the frontend
 RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - && \
   apt-get install -y nodejs &&\
   apt-get -q clean -y && rm -rf /var/lib/apt/lists/* && rm -f /var/cache/apt/*.bin

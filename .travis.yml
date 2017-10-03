@@ -1,16 +1,21 @@
 sudo: required
 
-language: python
+language: generic
 
 services:
   - docker
 
 before_install:
   - docker login -u="$DOCKERUSER" -p="$DOCKERPASS"
-  - docker build -t jgontrum/spacyapi:base .
-  - docker push jgontrum/spacyapi:base
-  - docker build -t jgontrum/spacyapi:en -f docker/en/Dockerfile .
+  - docker pull jgontrum/spacyapi:latest
+
+install:
+  - docker build -t jgontrum/spacyapi:base --cache-from jgontrum/spacyapi:latest .
+  - docker build -t jgontrum/spacyapi:en -f docker/en/Dockerfile --cache-from jgontrum/spacyapi:latest .
   - docker tag jgontrum/spacyapi:en jgontrum/spacyapi:latest
+
+after_success:
+  - docker push jgontrum/spacyapi:base
   - docker push jgontrum/spacyapi:en
   - docker push jgontrum/spacyapi:latest
 # TODO: Add other languages
