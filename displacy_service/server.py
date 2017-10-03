@@ -6,7 +6,7 @@ import json
 import os
 
 from spacy.symbols import ENT_TYPE, TAG, DEP
-
+import spacy.about
 import spacy.util
 
 from .parse import Parse, Entities
@@ -62,6 +62,21 @@ class ModelsResource(object):
         except Exception:
             resp.status = falcon.HTTP_500
 
+class VersionResource(object):
+    """Return the used spacy / api version
+
+    test with: curl -s localhost:8000/version
+    """
+    def on_get(self, req, resp):
+        try:
+            resp.body = json.dumps({
+              "spacy": spacy.about.__version__
+            }, sort_keys=True, indent=2)
+            resp.content_type = 'text/string'
+            resp.append_header('Access-Control-Allow-Origin', "*")
+            resp.status = falcon.HTTP_200
+        except Exception:
+            resp.status = falcon.HTTP_500
 
 class SchemaResource(object):
     """Describe the annotation scheme of a model.
@@ -138,3 +153,4 @@ APP.add_route('/dep', DepResource())
 APP.add_route('/ent', EntResource())
 APP.add_route('/{model_name}/schema', SchemaResource())
 APP.add_route('/models', ModelsResource())
+APP.add_route('/version', VersionResource())
