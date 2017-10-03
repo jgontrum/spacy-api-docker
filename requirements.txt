@@ -1,3 +1,5 @@
+spacy
+thinc
 certifi==2017.7.27.1
 chardet==3.0.4
 cymem==1.31.2
@@ -19,9 +21,7 @@ python-mimeparse==1.6.0
 regex==2017.9.23
 requests==2.18.4
 six==1.11.0
-spacy==1.9.0
 termcolor==1.1.0
-thinc==6.5.2
 toolz==0.8.2
 tqdm==4.17.1
 ujson==1.35

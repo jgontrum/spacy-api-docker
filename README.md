@@ -1,14 +1,65 @@
-<a href="https://explosion.ai"><img src="https://explosion.ai/assets/img/logo.svg" width="125" height="125" align="right" /></a>
+# spaCy API Docker
 
-# spaCy REST services
+**Ready-to-use Docker image for the spaCy NLP library.**
 
-This repository provides REST microservices for Explosion AI's [interactive demos](https://demos.explosion.ai) and visualisers. All requests and responses are JSON-encoded as `text/string`, so all requests require the header `Content-Type: text/string`.
+### Features
+- Use the awesome spaCy NLP framwork with other programming languages.
+- Better scaling: One NLP - multiple services.
+- Build using the official [spaCy REST services](https://github.com/explosion/spacy-services)
+- Dependency parsing visualisation with [displaCy](https://demos.explosion.ai/displacy/)
+- Docker images for **English**, **German**, **Spanish** and **Frensh**.
+- Automated builds to stay up to date with spaCy
+- Demo available [here](https://spacy.jgontrum.com/ui). 
+- Current spaCy version: 1.9.0
 
-## [displaCy server](displacy)
 
-A simple [Falcon](https://falconframework.org/) app for exposing a spaCy dependency parser and spaCy named entity recognition model as a REST microservice, formatted for the [displaCy.js](https://github.com/explosion/displacy) and [displaCy ENT](https://github.com/explosion/displacy-ent) visualiser. For more info on the rendering on the front-end that consumes the data produced by this service, see [this blog post](https://explosion.ai/blog/displacy-js-nlp-visualizer).
+*Documentation, API- and frontend code based upon [spaCy REST services](https://github.com/explosion/spacy-services) by [Explosion AI](https://explosion.ai).*
 
-The service exposes two endpoints that accept POST requests, and two endpoints that accept GET requests to describe the available models and schemas.
+---
+
+## Images
+
+| Image                    | Description                                |
+|--------------------------|--------------------------------------------|
+| jgontrum/spacyapi:base   | Base image, containing no language model   |
+| jgontrum/spacyapi:latest | English language model                     |
+| jgontrum/spacyapi:en     | English language model                     |
+| jgontrum/spacyapi:de     | German language model                      |
+| jgontrum/spacyapi:es     | Spanish language model                     |
+| jgontrum/spacyapi:fr     | Frensh language model                      |
+| jgontrum/spacyapi:all    | Contains EN, DE, ES and FR language models |
+
+---
+
+## Usage
+
+`docker run -p "127.0.0.1:8080:80" jgontrum/spacyapi:en`
+
+All models are loaded at start up time. Depending on the model size and server 
+performance, this can take a few minues.
+
+
+The displaCy frontend is available at `/ui`.
+
+### Docker Compose
+```json
+version: '2'
+
+services:
+  spacyapi:
+    image: jgontrum/spacyapi:en
+    ports:
+      - "127.0.0.1:8080:80"
+    restart: always
+
+```
+
+---
+## REST API Documentation
+
+### `GET` `/ui/`
+
+displaCy frontend is available here.
 
 ---
 
@@ -161,6 +212,7 @@ curl -s localhost:8000/dep -d '{"text":"Pastafarians are smarter than people wit
 }
 ```
 
+---
 
 ### `POST` `/ent/`
 
@@ -275,33 +327,22 @@ Example response:
 
 ---
 
-## [sense2vec server](sense2vec)
+### `GET` `/version`
 
-A simple [Falcon](https://falconframework.org/) app for exposing a sense2vec model as a REST microservice, as used in the [sense2vec demo](https://github.com/explosion/sense2vec-demo)
+Show the used spaCy version.
 
-The service exposes a single endpoint over GET.
-
----
-
-### `GET` `/{word|POS}`
-
-Example query:
+Example request:
 
 ```
-GET /natural_language_processing%7CNOUN
+GET /version
 ```
 
 Example response:
 
 ```json
-[
-    {
-        "score": 0.1,
-        "key": "computational_linguistics|NOUN",
-        "text": "computational linguistics",
-        "count": 20,
-        "head": "linguistics"
-    }
-]
+{
+  "spacy": "1.9.0"
+}
 ```
+
 
