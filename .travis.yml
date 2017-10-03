@@ -6,5 +6,11 @@ services:
   - docker
 
 before_install:
+  - docker login -u="$DOCKERUSER" -p="$DOCKERPASS"
   - docker build -t jgontrum/spacyapi:base .
-  - docker build -f docker/en/Dockerfile -t jgontrum/spacyapi:en
+  - docker push jgontrum/spacyapi:base
+  - docker build -t jgontrum/spacyapi:en -f docker/en/Dockerfile .
+  - docker tag jgontrum/spacyapi:en jgontrum/spacyapi:latest
+  - docker push jgontrum/spacyapi:en
+  - docker push jgontrum/spacyapi:latest
+# TODO: Add other languages
