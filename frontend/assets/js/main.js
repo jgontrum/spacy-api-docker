@@ -26,7 +26,7 @@
         font: 'inherit',
         color: '#f5f4f0',
         bg: '#272822',
-        onStart: false,
+        onStart: loading,
         onSuccess: loading
     });
 
