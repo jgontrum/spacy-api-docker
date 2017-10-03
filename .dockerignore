@@ -1,0 +1,12 @@
+.git
+*.swp
+*.swo
+.DS_STORE
+*.md
+env
+.idea
+*.egg-info
+!README.md
+coverage.xml
+.coverage
+frontend/node_modules

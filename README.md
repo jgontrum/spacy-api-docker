@@ -1,357 +1,348 @@
 # spaCy API Docker
 
-Flask based REST API for spaCy, the great and fast NLP framework.
-Supports the English and German language models and returns the analysis structured by sentences and by token.
+**Ready-to-use Docker image for the spaCy NLP library.**
 
-Please note that currently the dependency trees and word vectors are not being returned.
+### Features
+- Use the awesome spaCy NLP framwork with other programming languages.
+- Better scaling: One NLP - multiple services.
+- Build using the official [spaCy REST services](https://github.com/explosion/spacy-services)
+- Dependency parsing visualisation with [displaCy](https://demos.explosion.ai/displacy/)
+- Docker images for **English**, **German**, **Spanish** and **Frensh**.
+- Automated builds to stay up to date with spaCy
+- Demo available [here](https://spacy.jgontrum.com/ui). 
+- Current spaCy version: 1.9.0
 
-## New in version 0.2
-- Updated to spaCy 1.2.0
-- Support for batch processing of multiple texts
-- Certain token data can now be enabled/disabled
-- Added Makefile to easily run the API outside of Docker
-- To save space and increase start-up time, we do not download the word vectors
-- API port can be changed via a environmental variable ('PORT')
+
+*Documentation, API- and frontend code based upon [spaCy REST services](https://github.com/explosion/spacy-services) by [Explosion AI](https://explosion.ai).*
+
+---
+
+## Images
+
+| Image                    | Description                                |
+|--------------------------|--------------------------------------------|
+| jgontrum/spacyapi:base   | Base image, containing no language model   |
+| jgontrum/spacyapi:latest | English language model                     |
+| jgontrum/spacyapi:en     | English language model                     |
+| jgontrum/spacyapi:de     | German language model                      |
+| jgontrum/spacyapi:es     | Spanish language model                     |
+| jgontrum/spacyapi:fr     | Frensh language model                      |
+| jgontrum/spacyapi:all    | Contains EN, DE, ES and FR language models |
+
+---
 
 ## Usage
 
-```
-curl http://localhost:5000/api --header 'content-type: application/json' --data '{"text": "This is a text that I want to be analyzed."}' -X POST
+`docker run -p "127.0.0.1:8080:80" jgontrum/spacyapi:en`
+
+All models are loaded at start up time. Depending on the model size and server 
+performance, this can take a few minues.
+
+
+The displaCy frontend is available at `/ui`.
+
+### Docker Compose
+```json
+version: '2'
+
+services:
+  spacyapi:
+    image: jgontrum/spacyapi:en
+    ports:
+      - "127.0.0.1:8080:80"
+    restart: always
+
 ```
 
-You'll receive a JSON in return:
+---
+## REST API Documentation
 
-```
+### `GET` `/ui/`
+
+displaCy frontend is available here.
+
+---
+
+### `POST` `/dep/`
+
+Example request:
+
+```json
 {
-  'sentences': [[TOKEN, TOKEN, ...], [TOKEN, TOKEN, ...], ...],
-  'performance': CALCULATION_TIME_IN_SEC,
-  'version': SPACY_VERSION,
-  'numOfSentences': NUM_OF_SENTENCES,
-  'numOfTokens': NUM_OF_TOKENS
+    "text": "They ate the pizza with anchovies",
+    "model":"en",
+    "collapse_punctuation": 0,
+    "collapse_phrases": 1
 }
 ```
 
-```
-TOKEN: {
-  'token': TOKEN,
-  'lemma': LEMMA,
-  'tag': TAG,
-  'ner': NER,
-  'offsets': {
-    'begin': BEGIN,
-    'end': END
-  },
-  'oov': OUT_OF_VOCAB,
-  'stop': IS_STOPWORD,
-  'url': IS_URL,
-  'email': IS_MAIL,
-  'num': IS_NUM,
-  'pos': POS
-}
+| Name | Type | Description |
+| --- | --- | --- |
+| `text` | string | text to be parsed |
+| `model` | string | identifier string for a model installed on the server |
+| `collapse_punctuation` | boolean | Merge punctuation onto the preceding token? |
+| `collapse_phrases` | boolean | Merge noun chunks and named entities into single tokens? |  
+
+
+Example request using the Python [Requests library](http://docs.python-requests.org/en/master/):
+
+```python
+import json
+import requests
+
+url = "http://localhost:8000/dep"
+message_text = "They ate the pizza with anchovies"
+headers = {'content-type': 'application/json'}
+d = {'text': message_text, 'model': 'en'}
+
+response = requests.post(url, data=json.dumps(d), headers=headers)
+r = response.json()
 ```
 
-### API fields
+Example response:
 
-Field | Explanation
-------|------------
-text  | One text to be analyzed
-texts | List of texts to be analyzed
-fields| Optional. A list of token data fields that should be analyzed. Example: ['pos', 'token']
-
-Either 'text' or 'texts' is required.
-
-## Installation
-### Docker
-```
-docker pull jgontrum/spacyapi:en
-or
-docker pull jgontrum/spacyapi:de
-```
-### Local
-```
-make english
-or
-make german
-```
-
-## Run
-### Docker
-```
-docker run --name spacyapi -d -p 127.0.0.1:5000:5000 jgontrum/spacyapi:en
-```
-### Local
-```
-make run-en
-or
-make run-de
-```
-
-## Example
-### Simple
-#### Request
-```
-curl http://localhost:5000/api --header 'content-type: application/json' --data '{"text": "Das hier ist Peter. Peter ist eine Person."}' -X POST
-```
-
-#### Response
-```
+```json
 {
-  "performance": 0.0042879581451416016,
-  "version": "1.2.0",
-  "numOfSentences": 2,
-  "numOfTokens": 10,
-  "sentences": [
-    [
-      {
-        "offsets": {
-          "begin": 0,
-          "end": 3
-        },
-        "oov": false,
-        "stop": false,
-        "pos": "PRON",
-        "tag": "PDS",
-        "url": false,
-        "lemma": "das",
-        "token": "Das",
-        "num": false,
-        "ner": "",
-        "email": false
-      },
-      {
-        "offsets": {
-          "begin": 4,
-          "end": 8
-        },
-        "oov": false,
-        "stop": false,
-        "pos": "ADV",
-        "tag": "ADV",
-        "url": false,
-        "lemma": "hier",
-        "token": "hier",
-        "num": false,
-        "ner": "",
-        "email": false
-      },
-      {
-        "offsets": {
-          "begin": 9,
-          "end": 12
-        },
-        "oov": false,
-        "stop": false,
-        "pos": "AUX",
-        "tag": "VAFIN",
-        "url": false,
-        "lemma": "ist",
-        "token": "ist",
-        "num": false,
-        "ner": "",
-        "email": false
-      },
-      {
-        "offsets": {
-          "begin": 13,
-          "end": 18
-        },
-        "oov": false,
-        "stop": false,
-        "pos": "PROPN",
-        "tag": "NE",
-        "url": false,
-        "lemma": "peter",
-        "token": "Peter",
-        "num": false,
-        "ner": "PERSON",
-        "email": false
-      },
-      {
-        "offsets": {
-          "begin": 18,
-          "end": 19
-        },
-        "oov": false,
-        "stop": false,
-        "pos": "PUNCT",
-        "tag": "$.",
-        "url": false,
-        "lemma": ".",
-        "token": ".",
-        "num": false,
-        "ner": "",
-        "email": false
-      }
+    "arcs": [
+        { "dir": "left", "start": 0, "end": 1, "label": "nsubj" },
+        { "dir": "right", "start": 1, "end": 2, "label": "dobj" },
+        { "dir": "right", "start": 1, "end": 3, "label": "prep" },
+        { "dir": "right", "start": 3, "end": 4, "label": "pobj" },
+        { "dir": "left", "start": 2, "end": 3, "label": "prep" }
     ],
-    [
-      {
-        "offsets": {
-          "begin": 20,
-          "end": 25
-        },
-        "oov": false,
-        "stop": false,
-        "pos": "PROPN",
-        "tag": "NE",
-        "url": false,
-        "lemma": "peter",
-        "token": "Peter",
-        "num": false,
-        "ner": "PERSON",
-        "email": false
-      },
-      {
-        "offsets": {
-          "begin": 26,
-          "end": 29
-        },
-        "oov": false,
-        "stop": false,
-        "pos": "AUX",
-        "tag": "VAFIN",
-        "url": false,
-        "lemma": "ist",
-        "token": "ist",
-        "num": false,
-        "ner": "",
-        "email": false
-      },
-      {
-        "offsets": {
-          "begin": 30,
-          "end": 34
-        },
-        "oov": false,
-        "stop": false,
-        "pos": "DET",
-        "tag": "ART",
-        "url": false,
-        "lemma": "eine",
-        "token": "eine",
-        "num": false,
-        "ner": "",
-        "email": false
-      },
-      {
-        "offsets": {
-          "begin": 35,
-          "end": 41
-        },
-        "oov": false,
-        "stop": false,
-        "pos": "NOUN",
-        "tag": "NN",
-        "url": false,
-        "lemma": "Person",
-        "token": "Person",
-        "num": false,
-        "ner": "",
-        "email": false
-      },
-      {
-        "offsets": {
-          "begin": 41,
-          "end": 42
-        },
-        "oov": false,
-        "stop": false,
-        "pos": "PUNCT",
-        "tag": "$.",
-        "url": false,
-        "lemma": ".",
-        "token": ".",
-        "num": false,
-        "ner": "",
-        "email": false
-      }
+    "words": [
+        { "tag": "PRP", "text": "They" },
+        { "tag": "VBD", "text": "ate" },
+        { "tag": "NN", "text": "the pizza" },
+        { "tag": "IN", "text": "with" },
+        { "tag": "NNS", "text": "anchovies" }
     ]
+}
+```
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `arcs` | array | data to generate the arrows |
+| `dir` | string | direction of arrow (`"left"` or `"right"`) |
+| `start` | integer | offset of word the arrow starts **on** |
+| `end` | integer | offset of word the arrow ends **on** |
+| `label` | string | dependency label |
+| `words` | array | data to generate the words |
+| `tag` | string | part-of-speech tag |
+| `text` | string | token |
+
+---
+
+Curl command:
+
+```
+curl -s localhost:8000/dep -d '{"text":"Pastafarians are smarter than people with Coca Cola bottles.", "model":"en"}'
+```
+
+```json
+{
+  "arcs": [
+    {
+      "dir": "left",
+      "end": 1,
+      "label": "nsubj",
+      "start": 0
+    },
+    {
+      "dir": "right",
+      "end": 2,
+      "label": "acomp",
+      "start": 1
+    },
+    {
+      "dir": "right",
+      "end": 3,
+      "label": "prep",
+      "start": 2
+    },
+    {
+      "dir": "right",
+      "end": 4,
+      "label": "pobj",
+      "start": 3
+    },
+    {
+      "dir": "right",
+      "end": 5,
+      "label": "prep",
+      "start": 4
+    },
+    {
+      "dir": "right",
+      "end": 6,
+      "label": "pobj",
+      "start": 5
+    }
+  ],
+  "words": [
+    {
+      "tag": "NNPS",
+      "text": "Pastafarians"
+    },
+    {
+      "tag": "VBP",
+      "text": "are"
+    },
+    {
+      "tag": "JJR",
+      "text": "smarter"
+    },
+    {
+      "tag": "IN",
+      "text": "than"
+    },
+    {
+      "tag": "NNS",
+      "text": "people"
+    },
+    {
+      "tag": "IN",
+      "text": "with"
+    },
+    {
+      "tag": "NNS",
+      "text": "Coca Cola bottles."
+    }
   ]
 }
 ```
 
-### Multiple texts & selected fields
-#### Request
-```
-curl --request POST \
-  --url http://localhost:5000/api \
-  --header 'content-type: application/json' \
-  --data '{
-	"texts": ["Here comes Peter.", "And so does Mary."],
-	"fields": ["pos", "token", "lemma"]
-}'
-```
-#### Response
-```
+---
+
+### `POST` `/ent/`
+
+Example request:
+
+```json
 {
-	"numberOfTexts": 2,
-	"performance": [
-		0.003515958786010742
-	],
-	"version": "1.2.0",
-	"texts": [
-		{
-			"numOfSentences": 1,
-			"sentences": [
-				[
-					{
-						"token": "Here",
-						"pos": "ADV",
-						"lemma": "here"
-					},
-					{
-						"token": "comes",
-						"pos": "VERB",
-						"lemma": "come"
-					},
-					{
-						"token": "Peter",
-						"pos": "PROPN",
-						"lemma": "peter"
-					},
-					{
-						"token": ".",
-						"pos": "PUNCT",
-						"lemma": "."
-					}
-				]
-			],
-			"numOfTokens": 4
-		},
-		{
-			"numOfSentences": 1,
-			"sentences": [
-				[
-					{
-						"token": "And",
-						"pos": "CONJ",
-						"lemma": "and"
-					},
-					{
-						"token": "so",
-						"pos": "ADV",
-						"lemma": "so"
-					},
-					{
-						"token": "does",
-						"pos": "VERB",
-						"lemma": "do"
-					},
-					{
-						"token": "Mary",
-						"pos": "PROPN",
-						"lemma": "mary"
-					},
-					{
-						"token": ".",
-						"pos": "PUNCT",
-						"lemma": "."
-					}
-				]
-			],
-			"numOfTokens": 5
-		}
-	],
-	"lang": "en",
-	"error": false
+    "text": "When Sebastian Thrun started working on self-driving cars at Google in 2007, few people outside of the company took him seriously.",
+    "model": "en"
 }
 ```
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `text` | string | text to be parsed |
+| `model` | string | identifier string for a model installed on the server  |
+
+Example request using the Python [Requests library](http://docs.python-requests.org/en/master/):
+
+```python
+import json
+import requests
+
+url = "http://localhost:8000/ent"
+message_text = "When Sebastian Thrun started working on self-driving cars at Google in 2007, few people outside of the company took him seriously."
+headers = {'content-type': 'application/json'}
+d = {'text': message_text, 'model': 'en'}
+
+response = requests.post(url, data=json.dumps(d), headers=headers)
+r = response.json()
+```
+
+Example response:
+
+```json
+[
+    { "end": 20, "start": 5,  "type": "PERSON" },
+    { "end": 67, "start": 61, "type": "ORG" },
+    { "end": 75, "start": 71, "type": "DATE" }
+]
+```
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `end` | integer | character offset the entity ends **after** |
+| `start` | integer | character offset the entity starts **on** |
+| `type` | string | entity type |
+
+
+
+```
+curl -s localhost:8000/ent -d '{"text":"Pastafarians are smarter than people with Coca Cola bottles.", "model":"en"}'
+```
+
+```json
+[
+  {
+    "end": 12,
+    "start": 0,
+    "type": "NORP"
+  },
+  {
+    "end": 51,
+    "start": 42,
+    "type": "ORG"
+  }
+]
+```
+
+
+---
+
+### `GET` `/models`
+
+List the names of models installed on the server.
+
+Example request:
+
+```
+GET /models
+```
+
+Example response:
+
+```json
+["en", "de"]
+```
+
+---
+
+### `GET` `/{model}/schema/`
+
+Example request:
+
+```
+GET /en/schema
+```
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `model` | string | identifier string for a model installed on the server |
+
+Example response:
+
+```json
+{
+  "dep_types": ["ROOT", "nsubj"],
+  "ent_types": ["PERSON", "LOC", "ORG"],
+  "pos_types": ["NN", "VBZ", "SP"]
+}
+```
+
+---
+
+### `GET` `/version`
+
+Show the used spaCy version.
+
+Example request:
+
+```
+GET /version
+```
+
+Example response:
+
+```json
+{
+  "spacy": "1.9.0"
+}
+```
+
+

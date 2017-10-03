@@ -1,0 +1,27 @@
+sudo: required
+
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - docker login -u="$DOCKERUSER" -p="$DOCKERPASS"
+
+install:
+  - docker build -t jgontrum/spacyapi:base .
+  - docker build -t jgontrum/spacyapi:en -f docker/en/Dockerfile .
+  - docker tag jgontrum/spacyapi:en jgontrum/spacyapi:latest
+  - docker build -t jgontrum/spacyapi:de -f docker/de/Dockerfile .
+  - docker build -t jgontrum/spacyapi:es -f docker/es/Dockerfile .
+  - docker build -t jgontrum/spacyapi:fr -f docker/fr/Dockerfile .
+  - docker build -t jgontrum/spacyapi:all -f docker/all/Dockerfile .
+
+after_success:
+  - docker push jgontrum/spacyapi:base
+  - docker push jgontrum/spacyapi:en
+  - docker push jgontrum/spacyapi:de
+  - docker push jgontrum/spacyapi:es
+  - docker push jgontrum/spacyapi:fr
+  - docker push jgontrum/spacyapi:latest
+  - docker push jgontrum/spacyapi:all

@@ -1,20 +1,30 @@
-FROM debian:sid
-MAINTAINER Johannes Gontrum <https://github.com/jgontrum>
-ENV LANG de
-ENV PORT 5000
+FROM python:3.6
+LABEL maintainer="gontrum@me.com"
+LABEL version="0.2"
+LABEL description="Base image, containing no language models."
 
-RUN mkdir -p /usr/spacyapi
-COPY . /usr/spacyapi/
+# Install the required packages
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libssl-dev \
+    supervisor \
+    curl \
+    nginx &&\
+    apt-get -q clean -y && rm -rf /var/lib/apt/lists/* && rm -f /var/cache/apt/*.bin
 
-RUN apt-get update
-RUN apt-get install -y python3 build-essential gcc g++ python3-dev python3-setuptools python3-pip
-RUN export PIP_CERT=`python3 -m pip._vendor.requests.certs`
+# Install node for the frontend
+RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - && \
+  apt-get install -y nodejs &&\
+  apt-get -q clean -y && rm -rf /var/lib/apt/lists/* && rm -f /var/cache/apt/*.bin
 
-RUN pip3 install --upgrade pip setuptools
-RUN pip3 install -r /usr/spacyapi/requirements.txt
+# Copy and set up the app
+COPY . /app
+RUN cd /app && make clean && make && cd /app/frontend && make clean && make
 
-RUN python3 -m spacy.${LANG}.download parser
+# Configure nginx & supervisor
+RUN mv /app/config/nginx.conf /etc/nginx/sites-available/default &&\
+  echo "daemon off;" >> /etc/nginx/nginx.conf && \
+  mv /app/config/supervisor.conf /etc/supervisor/conf.d/
 
-ENTRYPOINT cd /usr/spacyapi && python3 server.py
-
-EXPOSE ${PORT}
+EXPOSE 80
+CMD ["supervisord", "-n"]
