@@ -12,6 +12,7 @@
 - Demo available [here](https://spacy.jgontrum.com/ui). 
 - Current spaCy version: 1.9.0
 
+Please note that this is a completely new API and is incompatible with the previous one. If you still need them, use `jgontrum/spacyapi:en-legacy` or  `jgontrum/spacyapi:de-legacy`.
 
 *Documentation, API- and frontend code based upon [spaCy REST services](https://github.com/explosion/spacy-services) by [Explosion AI](https://explosion.ai).*
 
@@ -28,6 +29,8 @@
 | jgontrum/spacyapi:es     | Spanish language model                     |
 | jgontrum/spacyapi:fr     | Frensh language model                      |
 | jgontrum/spacyapi:all    | Contains EN, DE, ES and FR language models |
+| jgontrum/spacyapi:en-legacy | Old API with English model |
+| jgontrum/spacyapi:de-legacy | Old API with German model |
 
 ---
 
