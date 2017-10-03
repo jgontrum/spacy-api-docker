@@ -1,4 +1,4 @@
 FROM jgontrum/spacyapi:base
 
-ENV languages "en"
+ENV languages "de"
 RUN cd /app && env/bin/download_models
