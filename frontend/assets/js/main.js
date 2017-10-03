@@ -26,7 +26,7 @@
         font: 'inherit',
         color: '#f5f4f0',
         bg: '#272822',
-        onStart: loading,
+        onStart: false,
         onSuccess: loading
     });
 
@@ -44,12 +44,10 @@
         const collapsePunct = (getQueryVar('cpu')) ? (getQueryVar('cpu') == 0 ? 0 : 1) : 1;
         const collapsePhrase = (getQueryVar('cph')) ? (getQueryVar('cph') == 0 ? 0 : 1) : 1;
 
-        const args = [ text, model, { collapsePhrase, collapsePunct } ];
+        const args = [text, model, { collapsePhrase, collapsePunct }];
 
-        if(getQueryVar('text')) updateView(...args);
-        if(getQueryVar('full') || getQueryVar('manual') || getQueryVar('steps')) updateURL(...args);
-
-        displacy.parse(...args);
+        if (getQueryVar('text')) updateView(...args);
+        if (getQueryVar('full') || getQueryVar('manual') || getQueryVar('steps')) updateURL(...args);
     });
 
 
@@ -62,9 +60,9 @@
             collapsePunct: $('#settings-punctuation').checked,
             collapsePhrase: $('#settings-phrases').checked
         }) => {
-            displacy.parse(text, model, settings);
-            updateView(text, model, settings);
-            updateURL(text, model, settings);
+        displacy.parse(text, model, settings);
+        updateView(text, model, settings);
+        updateURL(text, model, settings);
     }
 
 
@@ -101,11 +99,12 @@
     // Get URL Query Variables
 
     const getQueryVar = (key) => {
-       const query = window.location.search.substring(1);
-       const params = query.split('&').map(param => param.split('='));
+        const query = window.location.search.substring(1);
+        const params = query.split('&').map(param => param.split('='));
 
-       for(let param of params) if(param[0] == key) return decodeURIComponent(param[1]);
-       return false;
+        for (let param of params)
+            if (param[0] == key) return decodeURIComponent(param[1]);
+        return false;
     }
 
 

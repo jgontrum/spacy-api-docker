@@ -1,0 +1,10 @@
+sudo: required
+
+language: python
+
+services:
+  - docker
+
+before_install:
+  - docker build -t jgontrum/spacyapi:base .
+  - docker build -f docker/en/Dockerfile -t jgontrum/spacyapi:en
