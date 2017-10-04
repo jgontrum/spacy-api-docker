@@ -9,8 +9,8 @@
 - Dependency parsing visualisation with [displaCy](https://demos.explosion.ai/displacy/)
 - Docker images for **English**, **German**, **Spanish** and **Frensh**.
 - Automated builds to stay up to date with spaCy
-- Demo available [here](https://spacy.jgontrum.com/ui). 
-- Current spaCy version: 1.9.0
+- Demo available [here](https://spacy2.jgontrum.com/ui). 
+- Current spaCy version: latest nightly build (2.0.0 alpha)
 
 Please note that this is a completely new API and is incompatible with the previous one. If you still need them, use `jgontrum/spacyapi:en-legacy` or  `jgontrum/spacyapi:de-legacy`.
 
@@ -29,6 +29,11 @@ Please note that this is a completely new API and is incompatible with the previ
 | jgontrum/spacyapi:es     | Spanish language model                     |
 | jgontrum/spacyapi:fr     | Frensh language model                      |
 | jgontrum/spacyapi:all    | Contains EN, DE, ES and FR language models |
+| jgontrum/spacyapi:base_v2 | Base image for spaCy 2.0, containing no language model |
+| jgontrum/spacyapi:en_v2  | English language model, spaCy 2.0          |
+| jgontrum/spacyapi:de_v2  | German language model, spaCy 2.0           |
+| jgontrum/spacyapi:es_v2  | Spanish language model, spaCy 2.0          |
+| jgontrum/spacyapi:all_v2 | Contains EN, DE, ES and FR language models, spaCy 2.0 |
 | jgontrum/spacyapi:en-legacy | Old API with English model |
 | jgontrum/spacyapi:de-legacy | Old API with German model |
 
@@ -36,7 +41,7 @@ Please note that this is a completely new API and is incompatible with the previ
 
 ## Usage
 
-`docker run -p "127.0.0.1:8080:80" jgontrum/spacyapi:en`
+`docker run -p "127.0.0.1:8080:80" jgontrum/spacyapi:en_v2`
 
 All models are loaded at start up time. Depending on the model size and server 
 performance, this can take a few minues.
@@ -50,7 +55,7 @@ version: '2'
 
 services:
   spacyapi:
-    image: jgontrum/spacyapi:en
+    image: jgontrum/spacyapi:en_v2
     ports:
       - "127.0.0.1:8080:80"
     restart: always
