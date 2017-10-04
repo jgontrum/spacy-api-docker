@@ -7,7 +7,7 @@ from spacy.cli import download
 def download_models():
     languages = os.getenv("languages", "en").split()
     for lang in languages:
-        download(model=lang, direct=False)
+        download(None, model=lang, direct=False)
 
     print("Updating frontend settings...")
     frontend_settings = json.load(open("frontend/_data.json"))
