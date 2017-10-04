@@ -9,7 +9,7 @@ Try the demo for [spaCy 1.9.0](https://spacy.jgontrum.com/ui/?text=This%20is%20a
 - Better scaling: One NLP - multiple services.
 - Build using the official [spaCy REST services](https://github.com/explosion/spacy-services).
 - Dependency parsing visualisation with [displaCy](https://demos.explosion.ai/displacy/).
-- Docker images for **English**, **German**, **Spanish** and **Frensh**.
+- Docker images for **English**, **German**, **Spanish** and **French**.
 - Automated builds to stay up to date with spaCy.
 - Used spaCy version: 1.9.0 / 2.0.0alpha.
 
@@ -28,7 +28,7 @@ Please note that this is a completely new API and is incompatible with the previ
 | jgontrum/spacyapi:en     | English language model                     | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=master) |
 | jgontrum/spacyapi:de     | German language model                      | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=master) |
 | jgontrum/spacyapi:es     | Spanish language model                     | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=master) |
-| jgontrum/spacyapi:fr     | Frensh language model                      | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=master) |
+| jgontrum/spacyapi:fr     | French language model                      | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=master) |
 | jgontrum/spacyapi:all    | Contains EN, DE, ES and FR language models | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=master) |
 | jgontrum/spacyapi:base_v2   | Base image for spaCy 2.0  | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=spacy2) |
 | jgontrum/spacyapi:en_v2     | English language model for spaCy 2.0                    | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=spacy2) |
@@ -45,7 +45,7 @@ Please note that this is a completely new API and is incompatible with the previ
 `docker run -p "127.0.0.1:8080:80" jgontrum/spacyapi:en`
 
 All models are loaded at start up time. Depending on the model size and server 
-performance, this can take a few minues.
+performance, this can take a few minutes.
 
 
 The displaCy frontend is available at `/ui`.
