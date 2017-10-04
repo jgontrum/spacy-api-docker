@@ -34,7 +34,7 @@ Please note that this is a completely new API and is incompatible with the previ
 | jgontrum/spacyapi:en_v2     | English language model for spaCy 2.0                    | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=spacy2) |
 | jgontrum/spacyapi:de_v2     | German language model for spaCy 2.0                    | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=spacy2) |
 | jgontrum/spacyapi:es_v2     | Spanish language model for spaCy 2.0                    | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=spacy2) |
-| jgontrum/spacyapi:all_v2    | Contains EN, DE and FR language models for spaCy 2.0 | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=spacy2) |
+| jgontrum/spacyapi:all_v2    | Contains EN, DE and ES language models for spaCy 2.0 | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=spacy2) |
 | jgontrum/spacyapi:en-legacy | Old API with English model | *legacy* |
 | jgontrum/spacyapi:de-legacy | Old API with German model | *legacy* |
 
