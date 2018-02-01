@@ -1,9 +1,11 @@
 .PHONY: clean start build-and-push test
 
+PYTHON3=python3.6
+
 all: env/bin/python
 
 env/bin/python:
-	python3.6 -m venv env
+	$(PYTHON3) -m venv env
 	env/bin/pip install --upgrade pip
 	env/bin/pip install wheel
 	env/bin/pip install -r requirements.txt

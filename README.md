@@ -2,16 +2,14 @@
 
 **Ready-to-use Docker images for the [spaCy NLP library](https://github.com/explosion/spaCy).**
 
-Try the demo for [spaCy 1.9.0](https://spacy.jgontrum.com/ui/?text=This%20is%20an%20example.&model=en_core_web_sm&cpu=0&cph=0) or [spaCy 2.0.0 (alpha)](https://spacy2.jgontrum.com/ui/?text=This%20is%20an%20example.&model=en_core_web_sm&cpu=0&cph=0)!
-
 ### Features
-- Use the awesome spaCy NLP framwork with other programming languages.
+- Use the awesome spaCy NLP framework with other programming languages.
 - Better scaling: One NLP - multiple services.
 - Build using the official [spaCy REST services](https://github.com/explosion/spacy-services).
 - Dependency parsing visualisation with [displaCy](https://demos.explosion.ai/displacy/).
-- Docker images for **English**, **German**, **Spanish** and **French**.
+- Docker images for **English**, **German**, **Spanish**, **Italian**, **Dutch** and **French**.
 - Automated builds to stay up to date with spaCy.
-- Used spaCy version: 1.9.0 / 2.0.0alpha.
+- Current spaCy version: 2.0.6
 
 Please note that this is a completely new API and is incompatible with the previous one. If you still need them, use `jgontrum/spacyapi:en-legacy` or  `jgontrum/spacyapi:de-legacy`.
 
@@ -21,28 +19,33 @@ Please note that this is a completely new API and is incompatible with the previ
 
 ## Images
 
-| Image                    | Description                                | Build |
-|--------------------------|--------------------------------------------|--------|
-| jgontrum/spacyapi:base   | Base image, containing no language model   | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=master) |
-| jgontrum/spacyapi:latest | English language model                     | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=master) |
-| jgontrum/spacyapi:en     | English language model                     | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=master) |
-| jgontrum/spacyapi:de     | German language model                      | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=master) |
-| jgontrum/spacyapi:es     | Spanish language model                     | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=master) |
-| jgontrum/spacyapi:fr     | French language model                      | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=master) |
-| jgontrum/spacyapi:all    | Contains EN, DE, ES and FR language models | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=master) |
-| jgontrum/spacyapi:base_v2   | Base image for spaCy 2.0  | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=spacy2) |
-| jgontrum/spacyapi:en_v2     | English language model for spaCy 2.0                    | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=spacy2) |
-| jgontrum/spacyapi:de_v2     | German language model for spaCy 2.0                    | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=spacy2) |
-| jgontrum/spacyapi:es_v2     | Spanish language model for spaCy 2.0                    | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=spacy2) |
-| jgontrum/spacyapi:all_v2    | Contains EN, DE and ES language models for spaCy 2.0 | ![Build Status](https://travis-ci.org/jgontrum/spacy-api-docker.svg?branch=spacy2) |
-| jgontrum/spacyapi:en-legacy | Old API with English model | *legacy* |
-| jgontrum/spacyapi:de-legacy | Old API with German model | *legacy* |
+| Image                    | Description                                |
+|--------------------------|--------------------------------------------|
+| jgontrum/spacyapi:base_v2 | Base image for spaCy 2.0, containing no language model |
+| jgontrum/spacyapi:en_v2  | English language model, spaCy 2.0          |
+| jgontrum/spacyapi:de_v2  | German language model, spaCy 2.0           |
+| jgontrum/spacyapi:es_v2  | Spanish language model, spaCy 2.0          |
+| jgontrum/spacyapi:fr_v2  | Frensh language model, spaCy 2.0          |
+| jgontrum/spacyapi:pt_v2  | Portuguese language model, spaCy 2.0          |
+| jgontrum/spacyapi:it_v2  | Italian language model, spaCy 2.0          |
+| jgontrum/spacyapi:nl_v2  | Dutch language model, spaCy 2.0          |
+| jgontrum/spacyapi:all_v2 | Contains EN, DE, ES, PT, NL, IT and FR language models, spaCy 2.0 |
+| *OLD RELEASES*           |                                            |
+| jgontrum/spacyapi:base   | Base image, containing no language model   |
+| jgontrum/spacyapi:latest | English language model                     |
+| jgontrum/spacyapi:en     | English language model                     |
+| jgontrum/spacyapi:de     | German language model                      |
+| jgontrum/spacyapi:es     | Spanish language model                     |
+| jgontrum/spacyapi:fr     | Frensh language model                      |
+| jgontrum/spacyapi:all    | Contains EN, DE, ES and FR language models |
+| jgontrum/spacyapi:en-legacy | Old API with English model |
+| jgontrum/spacyapi:de-legacy | Old API with German model |
 
 ---
 
 ## Usage
 
-`docker run -p "127.0.0.1:8080:80" jgontrum/spacyapi:en`
+`docker run -p "127.0.0.1:8080:80" jgontrum/spacyapi:en_v2`
 
 All models are loaded at start up time. Depending on the model size and server 
 performance, this can take a few minutes.
@@ -56,7 +59,7 @@ version: '2'
 
 services:
   spacyapi:
-    image: jgontrum/spacyapi:en
+    image: jgontrum/spacyapi:en_v2
     ports:
       - "127.0.0.1:8080:80"
     restart: always

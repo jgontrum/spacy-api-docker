@@ -9,19 +9,23 @@ before_install:
   - docker login -u="$DOCKERUSER" -p="$DOCKERPASS"
 
 install:
-  - docker build -t jgontrum/spacyapi:base .
-  - docker build -t jgontrum/spacyapi:en -f docker/en/Dockerfile .
-  - docker tag jgontrum/spacyapi:en jgontrum/spacyapi:latest
-  - docker build -t jgontrum/spacyapi:de -f docker/de/Dockerfile .
-  - docker build -t jgontrum/spacyapi:es -f docker/es/Dockerfile .
-  - docker build -t jgontrum/spacyapi:fr -f docker/fr/Dockerfile .
-  - docker build -t jgontrum/spacyapi:all -f docker/all/Dockerfile .
+  - docker build -t jgontrum/spacyapi:base_v2 .
+  - docker build -t jgontrum/spacyapi:en_v2 -f docker/en/Dockerfile .
+  - docker build -t jgontrum/spacyapi:de_v2 -f docker/de/Dockerfile .
+  - docker build -t jgontrum/spacyapi:es_v2 -f docker/es/Dockerfile .
+  - docker build -t jgontrum/spacyapi:fr_v2 -f docker/fr/Dockerfile .
+  - docker build -t jgontrum/spacyapi:nl_v2 -f docker/nl/Dockerfile .
+  - docker build -t jgontrum/spacyapi:pt_v2 -f docker/pt/Dockerfile .
+  - docker build -t jgontrum/spacyapi:it_v2 -f docker/it/Dockerfile .
+  - docker build -t jgontrum/spacyapi:all_v2 -f docker/all/Dockerfile .
 
 after_success:
-  - docker push jgontrum/spacyapi:base
-  - docker push jgontrum/spacyapi:en
-  - docker push jgontrum/spacyapi:de
-  - docker push jgontrum/spacyapi:es
-  - docker push jgontrum/spacyapi:fr
-  - docker push jgontrum/spacyapi:latest
-  - docker push jgontrum/spacyapi:all
+  - docker push jgontrum/spacyapi:base_v2
+  - docker push jgontrum/spacyapi:en_v2
+  - docker push jgontrum/spacyapi:de_v2
+  - docker push jgontrum/spacyapi:es_v2
+  - docker push jgontrum/spacyapi:fr_v2
+  - docker push jgontrum/spacyapi:pt_v2
+  - docker push jgontrum/spacyapi:it_v2
+  - docker push jgontrum/spacyapi:nl_v2
+  - docker push jgontrum/spacyapi:all_v2
