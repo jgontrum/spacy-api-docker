@@ -25,7 +25,7 @@ Please note that this is a completely new API and is incompatible with the previ
 | jgontrum/spacyapi:en_v2  | English language model, spaCy 2.0          |
 | jgontrum/spacyapi:de_v2  | German language model, spaCy 2.0           |
 | jgontrum/spacyapi:es_v2  | Spanish language model, spaCy 2.0          |
-| jgontrum/spacyapi:fr_v2  | Frensh language model, spaCy 2.0          |
+| jgontrum/spacyapi:fr_v2  | French language model, spaCy 2.0          |
 | jgontrum/spacyapi:pt_v2  | Portuguese language model, spaCy 2.0          |
 | jgontrum/spacyapi:it_v2  | Italian language model, spaCy 2.0          |
 | jgontrum/spacyapi:nl_v2  | Dutch language model, spaCy 2.0          |
@@ -36,7 +36,7 @@ Please note that this is a completely new API and is incompatible with the previ
 | jgontrum/spacyapi:en     | English language model                     |
 | jgontrum/spacyapi:de     | German language model                      |
 | jgontrum/spacyapi:es     | Spanish language model                     |
-| jgontrum/spacyapi:fr     | Frensh language model                      |
+| jgontrum/spacyapi:fr     | French language model                      |
 | jgontrum/spacyapi:all    | Contains EN, DE, ES and FR language models |
 | jgontrum/spacyapi:en-legacy | Old API with English model |
 | jgontrum/spacyapi:de-legacy | Old API with German model |
