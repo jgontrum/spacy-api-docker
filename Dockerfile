@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     supervisor \
     curl \
-    nginx &&\
+    nginx \
+    vim-tiny &&\
     apt-get -q clean -y && rm -rf /var/lib/apt/lists/* && rm -f /var/cache/apt/*.bin
 
 # Install node for the frontend
@@ -26,5 +27,6 @@ RUN mv /app/config/nginx.conf /etc/nginx/sites-available/default &&\
   echo "daemon off;" >> /etc/nginx/nginx.conf && \
   mv /app/config/supervisor.conf /etc/supervisor/conf.d/
 
+ENV PORT 80
 EXPOSE 80
-CMD ["supervisord", "-n"]
+CMD ["bash", "/app/start.sh"]
