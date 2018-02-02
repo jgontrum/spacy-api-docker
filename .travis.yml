@@ -7,6 +7,7 @@ services:
 
 before_install:
   - docker login -u="$DOCKERUSER" -p="$DOCKERPASS"
+  - docker login -u="$HEROKUUSER" -p="$HEROKUPASS" $HEROKUREPO
 
 install:
   - docker build -t jgontrum/spacyapi:base_v2 .
@@ -29,3 +30,7 @@ after_success:
   - docker push jgontrum/spacyapi:it_v2
   - docker push jgontrum/spacyapi:nl_v2
   - docker push jgontrum/spacyapi:all_v2
+  - docker tag jgontrum/spacyapi:en_v2 registry.heroku.com/spacy-en/web
+  - docker push registry.heroku.com/spacy-en/web
+  - docker tag jgontrum/spacyapi:de_v2 registry.heroku.com/spacy-de/web
+  - docker push registry.heroku.com/spacy-de/web
