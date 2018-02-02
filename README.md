@@ -1,5 +1,8 @@
 # spaCy API Docker
 
+**[ENGLISH DEMO](http://spacy-en.herokuapp.com/ui/?text=This%20is%20a%20test.&model=en&cpu=1&cph=1)** | 
+**[GERMAN DEMO](http://spacy-de.herokuapp.com/ui/?text=Dies%20ist%20ein%20Test.&model=de&cpu=1&cph=1)**
+
 **Ready-to-use Docker images for the [spaCy NLP library](https://github.com/explosion/spaCy).**
 
 ### Features
