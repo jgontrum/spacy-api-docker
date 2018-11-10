@@ -1,8 +1,5 @@
 # spaCy API Docker
 
-**[ENGLISH DEMO](http://spacy-en.herokuapp.com/ui/?text=This%20is%20a%20test.&model=en&cpu=1&cph=1)** | 
-**[GERMAN DEMO](http://spacy-de.herokuapp.com/ui/?text=Dies%20ist%20ein%20Test.&model=de&cpu=1&cph=1)**
-
 **Ready-to-use Docker images for the [spaCy NLP library](https://github.com/explosion/spaCy).**
 
 ### Features
@@ -12,7 +9,7 @@
 - Dependency parsing visualisation with [displaCy](https://demos.explosion.ai/displacy/).
 - Docker images for **English**, **German**, **Spanish**, **Italian**, **Dutch** and **French**.
 - Automated builds to stay up to date with spaCy.
-- Current spaCy version: 2.0.11
+- Current spaCy version: 2.0.16
 
 Please note that this is a completely new API and is incompatible with the previous one. If you still need them, use `jgontrum/spacyapi:en-legacy` or  `jgontrum/spacyapi:de-legacy`.
 
