@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/explosion/displacy#readme",
   "devDependencies": {
-    "harp": "^0.20.3"
+    "harp": "^0.29.0"
   }
 }

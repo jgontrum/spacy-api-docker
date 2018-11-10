@@ -9,8 +9,7 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     supervisor \
     curl \
-    nginx \
-    vim-tiny &&\
+    nginx && \
     apt-get -q clean -y && rm -rf /var/lib/apt/lists/* && rm -f /var/cache/apt/*.bin
 
 # Install node for the frontend
@@ -20,7 +19,13 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
 
 # Copy and set up the app
 COPY . /app
-RUN cd /app && make clean && make && cd /app/frontend && make clean && make
+
+# Build SASSC
+RUN bash /app/build_sassc.sh
+
+# Build app
+RUN cd /app/frontend && make clean && make
+RUN cd /app && make clean && make
 
 # Configure nginx & supervisor
 RUN mv /app/config/nginx.conf /etc/nginx/sites-available/default &&\
