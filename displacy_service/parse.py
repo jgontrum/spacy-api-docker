@@ -13,7 +13,7 @@ class Parse(object):
                 end = word.i + 1
                 while end < len(self.doc) and self.doc[end].is_punct:
                     end += 1
-                span = self.doc[start : end]
+                span = self.doc[start: end]
                 spans.append(
                     (span.start_char, span.end_char, word.tag_, word.lemma_, word.ent_type_)
                 )
@@ -52,13 +52,22 @@ class Parse(object):
 class Entities(object):
     def __init__(self, nlp, text):
         self.doc = nlp(text)
-     
+
     def to_json(self):
         return [
             {
-            'start': ent.start_char,
-            'end': ent.end_char,
-            'type': ent.label_,
-            'text': str(ent)
+                'start': ent.start_char,
+                'end': ent.end_char,
+                'type': ent.label_,
+                'text': str(ent)
             } for ent in self.doc.ents
         ]
+
+
+class Sentences(object):
+    def __init__(self, nlp, text):
+        self.doc = nlp(text)
+
+    def to_json(self):
+        sents = [sent.string.strip() for sent in self.doc.sents]
+        return sents
