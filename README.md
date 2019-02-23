@@ -3,6 +3,7 @@
 **Ready-to-use Docker images for the [spaCy NLP library](https://github.com/explosion/spaCy).**
 
 ### Features
+
 - Use the awesome spaCy NLP framework with other programming languages.
 - Better scaling: One NLP - multiple services.
 - Build using the official [spaCy REST services](https://github.com/explosion/spacy-services).
@@ -11,35 +12,35 @@
 - Automated builds to stay up to date with spaCy.
 - Current spaCy version: 2.0.16
 
-Please note that this is a completely new API and is incompatible with the previous one. If you still need them, use `jgontrum/spacyapi:en-legacy` or  `jgontrum/spacyapi:de-legacy`.
+Please note that this is a completely new API and is incompatible with the previous one. If you still need them, use `jgontrum/spacyapi:en-legacy` or `jgontrum/spacyapi:de-legacy`.
 
-*Documentation, API- and frontend code based upon [spaCy REST services](https://github.com/explosion/spacy-services) by [Explosion AI](https://explosion.ai).*
+_Documentation, API- and frontend code based upon [spaCy REST services](https://github.com/explosion/spacy-services) by [Explosion AI](https://explosion.ai)._
 
 ---
 
 ## Images
 
-| Image                    | Description                                |
-|--------------------------|--------------------------------------------|
-| jgontrum/spacyapi:base_v2 | Base image for spaCy 2.0, containing no language model |
-| jgontrum/spacyapi:en_v2  | English language model, spaCy 2.0          |
-| jgontrum/spacyapi:de_v2  | German language model, spaCy 2.0           |
-| jgontrum/spacyapi:es_v2  | Spanish language model, spaCy 2.0          |
-| jgontrum/spacyapi:fr_v2  | French language model, spaCy 2.0          |
-| jgontrum/spacyapi:pt_v2  | Portuguese language model, spaCy 2.0          |
-| jgontrum/spacyapi:it_v2  | Italian language model, spaCy 2.0          |
-| jgontrum/spacyapi:nl_v2  | Dutch language model, spaCy 2.0          |
-| jgontrum/spacyapi:all_v2 | Contains EN, DE, ES, PT, NL, IT and FR language models, spaCy 2.0 |
-| *OLD RELEASES*           |                                            |
-| jgontrum/spacyapi:base   | Base image, containing no language model   |
-| jgontrum/spacyapi:latest | English language model                     |
-| jgontrum/spacyapi:en     | English language model                     |
-| jgontrum/spacyapi:de     | German language model                      |
-| jgontrum/spacyapi:es     | Spanish language model                     |
-| jgontrum/spacyapi:fr     | French language model                      |
-| jgontrum/spacyapi:all    | Contains EN, DE, ES and FR language models |
-| jgontrum/spacyapi:en-legacy | Old API with English model |
-| jgontrum/spacyapi:de-legacy | Old API with German model |
+| Image                       | Description                                                       |
+| --------------------------- | ----------------------------------------------------------------- |
+| jgontrum/spacyapi:base_v2   | Base image for spaCy 2.0, containing no language model            |
+| jgontrum/spacyapi:en_v2     | English language model, spaCy 2.0                                 |
+| jgontrum/spacyapi:de_v2     | German language model, spaCy 2.0                                  |
+| jgontrum/spacyapi:es_v2     | Spanish language model, spaCy 2.0                                 |
+| jgontrum/spacyapi:fr_v2     | French language model, spaCy 2.0                                  |
+| jgontrum/spacyapi:pt_v2     | Portuguese language model, spaCy 2.0                              |
+| jgontrum/spacyapi:it_v2     | Italian language model, spaCy 2.0                                 |
+| jgontrum/spacyapi:nl_v2     | Dutch language model, spaCy 2.0                                   |
+| jgontrum/spacyapi:all_v2    | Contains EN, DE, ES, PT, NL, IT and FR language models, spaCy 2.0 |
+| _OLD RELEASES_              |                                                                   |
+| jgontrum/spacyapi:base      | Base image, containing no language model                          |
+| jgontrum/spacyapi:latest    | English language model                                            |
+| jgontrum/spacyapi:en        | English language model                                            |
+| jgontrum/spacyapi:de        | German language model                                             |
+| jgontrum/spacyapi:es        | Spanish language model                                            |
+| jgontrum/spacyapi:fr        | French language model                                             |
+| jgontrum/spacyapi:all       | Contains EN, DE, ES and FR language models                        |
+| jgontrum/spacyapi:en-legacy | Old API with English model                                        |
+| jgontrum/spacyapi:de-legacy | Old API with German model                                         |
 
 ---
 
@@ -47,13 +48,13 @@ Please note that this is a completely new API and is incompatible with the previ
 
 `docker run -p "127.0.0.1:8080:80" jgontrum/spacyapi:en_v2`
 
-All models are loaded at start up time. Depending on the model size and server 
+All models are loaded at start up time. Depending on the model size and server
 performance, this can take a few minutes.
-
 
 The displaCy frontend is available at `/ui`.
 
 ### Docker Compose
+
 ```json
 version: '2'
 
@@ -67,6 +68,7 @@ services:
 ```
 
 ---
+
 ## REST API Documentation
 
 ### `GET` `/ui/`
@@ -81,20 +83,19 @@ Example request:
 
 ```json
 {
-    "text": "They ate the pizza with anchovies",
-    "model":"en",
-    "collapse_punctuation": 0,
-    "collapse_phrases": 1
+  "text": "They ate the pizza with anchovies",
+  "model": "en",
+  "collapse_punctuation": 0,
+  "collapse_phrases": 1
 }
 ```
 
-| Name | Type | Description |
-| --- | --- | --- |
-| `text` | string | text to be parsed |
-| `model` | string | identifier string for a model installed on the server |
-| `collapse_punctuation` | boolean | Merge punctuation onto the preceding token? |
-| `collapse_phrases` | boolean | Merge noun chunks and named entities into single tokens? |  
-
+| Name                   | Type    | Description                                              |
+| ---------------------- | ------- | -------------------------------------------------------- |
+| `text`                 | string  | text to be parsed                                        |
+| `model`                | string  | identifier string for a model installed on the server    |
+| `collapse_punctuation` | boolean | Merge punctuation onto the preceding token?              |
+| `collapse_phrases`     | boolean | Merge noun chunks and named entities into single tokens? |
 
 Example request using the Python [Requests library](http://docs.python-requests.org/en/master/):
 
@@ -115,33 +116,33 @@ Example response:
 
 ```json
 {
-    "arcs": [
-        { "dir": "left", "start": 0, "end": 1, "label": "nsubj" },
-        { "dir": "right", "start": 1, "end": 2, "label": "dobj" },
-        { "dir": "right", "start": 1, "end": 3, "label": "prep" },
-        { "dir": "right", "start": 3, "end": 4, "label": "pobj" },
-        { "dir": "left", "start": 2, "end": 3, "label": "prep" }
-    ],
-    "words": [
-        { "tag": "PRP", "text": "They" },
-        { "tag": "VBD", "text": "ate" },
-        { "tag": "NN", "text": "the pizza" },
-        { "tag": "IN", "text": "with" },
-        { "tag": "NNS", "text": "anchovies" }
-    ]
+  "arcs": [
+    { "dir": "left", "start": 0, "end": 1, "label": "nsubj" },
+    { "dir": "right", "start": 1, "end": 2, "label": "dobj" },
+    { "dir": "right", "start": 1, "end": 3, "label": "prep" },
+    { "dir": "right", "start": 3, "end": 4, "label": "pobj" },
+    { "dir": "left", "start": 2, "end": 3, "label": "prep" }
+  ],
+  "words": [
+    { "tag": "PRP", "text": "They" },
+    { "tag": "VBD", "text": "ate" },
+    { "tag": "NN", "text": "the pizza" },
+    { "tag": "IN", "text": "with" },
+    { "tag": "NNS", "text": "anchovies" }
+  ]
 }
 ```
 
-| Name | Type | Description |
-| --- | --- | --- |
-| `arcs` | array | data to generate the arrows |
-| `dir` | string | direction of arrow (`"left"` or `"right"`) |
-| `start` | integer | offset of word the arrow starts **on** |
-| `end` | integer | offset of word the arrow ends **on** |
-| `label` | string | dependency label |
-| `words` | array | data to generate the words |
-| `tag` | string | part-of-speech tag |
-| `text` | string | token |
+| Name    | Type    | Description                                |
+| ------- | ------- | ------------------------------------------ |
+| `arcs`  | array   | data to generate the arrows                |
+| `dir`   | string  | direction of arrow (`"left"` or `"right"`) |
+| `start` | integer | offset of word the arrow starts **on**     |
+| `end`   | integer | offset of word the arrow ends **on**       |
+| `label` | string  | dependency label                           |
+| `words` | array   | data to generate the words                 |
+| `tag`   | string  | part-of-speech tag                         |
+| `text`  | string  | token                                      |
 
 ---
 
@@ -232,15 +233,15 @@ Example request:
 
 ```json
 {
-    "text": "When Sebastian Thrun started working on self-driving cars at Google in 2007, few people outside of the company took him seriously.",
-    "model": "en"
+  "text": "When Sebastian Thrun started working on self-driving cars at Google in 2007, few people outside of the company took him seriously.",
+  "model": "en"
 }
 ```
 
-| Name | Type | Description |
-| --- | --- | --- |
-| `text` | string | text to be parsed |
-| `model` | string | identifier string for a model installed on the server  |
+| Name    | Type   | Description                                           |
+| ------- | ------ | ----------------------------------------------------- |
+| `text`  | string | text to be parsed                                     |
+| `model` | string | identifier string for a model installed on the server |
 
 Example request using the Python [Requests library](http://docs.python-requests.org/en/master/):
 
@@ -261,19 +262,17 @@ Example response:
 
 ```json
 [
-    { "end": 20, "start": 5,  "type": "PERSON" },
-    { "end": 67, "start": 61, "type": "ORG" },
-    { "end": 75, "start": 71, "type": "DATE" }
+  { "end": 20, "start": 5, "type": "PERSON" },
+  { "end": 67, "start": 61, "type": "ORG" },
+  { "end": 75, "start": 71, "type": "DATE" }
 ]
 ```
 
-| Name | Type | Description |
-| --- | --- | --- |
-| `end` | integer | character offset the entity ends **after** |
-| `start` | integer | character offset the entity starts **on** |
-| `type` | string | entity type |
-
-
+| Name    | Type    | Description                                |
+| ------- | ------- | ------------------------------------------ |
+| `end`   | integer | character offset the entity ends **after** |
+| `start` | integer | character offset the entity starts **on**  |
+| `type`  | string  | entity type                                |
 
 ```
 curl -s localhost:8000/ent -d '{"text":"Pastafarians are smarter than people with Coca Cola bottles.", "model":"en"}'
@@ -294,8 +293,44 @@ curl -s localhost:8000/ent -d '{"text":"Pastafarians are smarter than people wit
 ]
 ```
 
-
 ---
+
+### `POST` `/sents/`
+
+Example request:
+
+```json
+{
+  "text": "In 2012 I was a mediocre developer. But today I am at least a bit better.",
+  "model": "en"
+}
+```
+
+| Name    | Type   | Description                                           |
+| ------- | ------ | ----------------------------------------------------- |
+| `text`  | string | text to be parsed                                     |
+| `model` | string | identifier string for a model installed on the server |
+
+Example request using the Python [Requests library](http://docs.python-requests.org/en/master/):
+
+```python
+import json
+import requests
+
+url = "http://localhost:8000/sents"
+message_text = "In 2012 I was a mediocre developer. But today I am at least a bit better."
+headers = {'content-type': 'application/json'}
+d = {'text': message_text, 'model': 'en'}
+
+response = requests.post(url, data=json.dumps(d), headers=headers)
+r = response.json()
+```
+
+Example response:
+
+```json
+["In 2012 I was a mediocre developer.", "But today I am at least a bit better."]
+```
 
 ### `GET` `/models`
 
@@ -323,8 +358,8 @@ Example request:
 GET /en/schema
 ```
 
-| Name | Type | Description |
-| --- | --- | --- |
+| Name    | Type   | Description                                           |
+| ------- | ------ | ----------------------------------------------------- |
 | `model` | string | identifier string for a model installed on the server |
 
 Example response:
@@ -356,5 +391,3 @@ Example response:
   "spacy": "1.9.0"
 }
 ```
-
-
