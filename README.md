@@ -236,7 +236,7 @@ Example request:
   "text": "Fed raises interest rates 0.5 percent.",
   "model": "en"
   "include_sentences": false,
-  "attr_filter": ["text", "start", "end", "lemma", "pos"]
+  "token_filter": ["text", "start", "end", "lemma", "pos"]
 }
 ```
 
@@ -245,7 +245,8 @@ Example request:
 | `text`              | string  | text to be parsed                                     |
 | `model`             | string  | identifier string for a model installed on the server |
 | `include_sentences` | boolean | include sentence layer                                |
-| `attr_filter`       | array   | array of token attributes to include in response      |
+| `token_filter`      | array   | array of token attributes to include in response      |
+| `sentence_filter`   | array   | array of sentence attributes to include in response      |
 
 Example request using the Python [Requests library](http://docs.python-requests.org/en/master/):
 
@@ -256,7 +257,7 @@ import requests
 url = "http://localhost:8000/ent"
 message_text = "Fed raises interest rates 0.5 percent."
 headers = {'content-type': 'application/json'}
-d = {'text': message_text, 'model': 'en', 'include_sentences': False, "attr_filter": ['text', 'start', 'end', 'lemma', 'pos']}
+d = {'text': message_text, 'model': 'en', 'include_sentences': False, "token_filter": ['text', 'start', 'end', 'lemma', 'pos']}
 
 response = requests.post(url, data=json.dumps(d), headers=headers)
 r = response.json()
@@ -314,7 +315,7 @@ Example response:
 | `cluster`        | string  |                                           |
 
 ```
-curl -s localhost:8000/tag -d '{"text":"This a test that should split into sentences! This is the second.", "model":"en", "include_sentences": true, "attr_filter": ["text", "start", "end", "lemma", "pos"]}'
+curl -s localhost:8000/tag -d '{"text":"This a test that should split into sentences! This is the second.", "model":"en", "include_sentences": true, "token_filter": ["text", "start", "end", "lemma", "pos"], "sentence_filter": ["text", "start", "end", "tokens"]}'
 ```
 
 ```json
@@ -346,6 +347,12 @@ curl -s localhost:8000/tag -d '{"text":"This a test that should split into sente
     ]}
 ]
 ```
+| Name             | Type    | Description                                  |
+| ---------------- | ------- | -------------------------------------------- |
+| `end`            | integer | character offset the sentence ends **after** |
+| `start`          | integer | character offset the sentence starts **on**  |
+| `text`           | string  |                                              |
+| `tokens`         | array   |                                              |
 
 ---
 

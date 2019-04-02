@@ -50,7 +50,7 @@ class TestAPI(falcon.testing.TestCase):
             json={
                 "text": "Fed raises interest rates 0.5 percent.",
                 "model": "en",
-                "attr_filter": ["text", "start", "end", "lemma", "pos"]
+                "token_filter": ["text", "start", "end", "lemma", "pos"]
             }).json
 
         assert toks == [{'start': 0, 'end': 3, 'text': 'Fed', 'lemma': 'fed', 'pos': 'PROPN'},
@@ -68,7 +68,8 @@ class TestAPI(falcon.testing.TestCase):
                 "text": "This a test that should split into sentences! This is the second.",
                 "model": "en",
                 "include_sentences": True,
-                "attr_filter": ["text", "start", "end", "lemma", "pos"]
+                "token_filter": ["text", "start", "end", "lemma", "pos"],
+                "sentence_filter": ["text", "start", "end", "tokens"],
             }).json
         assert sents == [
             {'text': 'This a test that should split into sentences!',

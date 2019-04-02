@@ -164,10 +164,11 @@ class TaggerResource(object):
         text = json_data.get('text')
         model_name = json_data.get('model', 'en')
         include_sentences = json_data.get('include_sentences', False)
-        attr_filter = json_data.get('attr_filter', [])
+        token_filter = json_data.get('token_filter', [])
+        sentence_filter = json_data.get('sentence_filter', [])
         try:
             model = get_model(model_name)
-            tokens = Tokens(model, text, include_sentences,attr_filter)
+            tokens = Tokens(model, text, include_sentences,token_filter,sentence_filter)
             resp.body = json.dumps(tokens.to_json(),
                                    indent=2)
             resp.content_type = 'application/json'
