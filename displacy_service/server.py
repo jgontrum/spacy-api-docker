@@ -115,7 +115,7 @@ class DepResource(object):
     """
 
     def on_post(self, req, resp):
-        req_body = req.stream.read()
+        req_body = req.bounded_stream.read()
         json_data = json.loads(req_body.decode('utf8'))
         text = json_data.get('text')
         model_name = json_data.get('model', 'en')
@@ -139,7 +139,7 @@ class EntResource(object):
     """Parse text and return displaCy ent's expected output."""
 
     def on_post(self, req, resp):
-        req_body = req.stream.read()
+        req_body = req.bounded_stream.read()
         json_data = json.loads(req_body.decode('utf8'))
         text = json_data.get('text')
         model_name = json_data.get('model', 'en')
@@ -159,7 +159,7 @@ class SentsResources(object):
     """Returns sentences"""
 
     def on_post(self, req, resp):
-        req_body = req.stream.read()
+        req_body = req.bounded_stream.read()
         json_data = json.loads(req_body.decode('utf8'))
         text = json_data.get('text')
         model_name = json_data.get('model', 'en')

@@ -1,4 +1,4 @@
 spacy
-falcon
+falcon==2.0.0
 pytest
-requests
+requests==2.21.0
