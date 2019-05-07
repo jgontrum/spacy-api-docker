@@ -227,21 +227,26 @@ curl -s localhost:8000/dep -d '{"text":"Pastafarians are smarter than people wit
 
 ---
 
-### `POST` `/ent/`
+### `POST` `/tag/`
 
 Example request:
 
 ```json
 {
-  "text": "When Sebastian Thrun started working on self-driving cars at Google in 2007, few people outside of the company took him seriously.",
+  "text": "Fed raises interest rates 0.5 percent.",
   "model": "en"
+  "include_sentences": false,
+  "token_filter": ["text", "start", "end", "lemma", "pos"]
 }
 ```
 
-| Name    | Type   | Description                                           |
-| ------- | ------ | ----------------------------------------------------- |
-| `text`  | string | text to be parsed                                     |
-| `model` | string | identifier string for a model installed on the server |
+| Name                | Type    | Description                                           |
+| ------------------- | ------- | ----------------------------------------------------- |
+| `text`              | string  | text to be parsed                                     |
+| `model`             | string  | identifier string for a model installed on the server |
+| `include_sentences` | boolean | include sentence layer                                |
+| `token_filter`      | array   | array of token attributes to include in response      |
+| `sentence_filter`   | array   | array of sentence attributes to include in response      |
 
 Example request using the Python [Requests library](http://docs.python-requests.org/en/master/):
 
@@ -250,9 +255,9 @@ import json
 import requests
 
 url = "http://localhost:8000/ent"
-message_text = "When Sebastian Thrun started working on self-driving cars at Google in 2007, few people outside of the company took him seriously."
+message_text = "Fed raises interest rates 0.5 percent."
 headers = {'content-type': 'application/json'}
-d = {'text': message_text, 'model': 'en'}
+d = {'text': message_text, 'model': 'en', 'include_sentences': False, "token_filter": ['text', 'start', 'end', 'lemma', 'pos']}
 
 response = requests.post(url, data=json.dumps(d), headers=headers)
 r = response.json()
@@ -262,36 +267,92 @@ Example response:
 
 ```json
 [
-  { "end": 20, "start": 5, "type": "PERSON" },
-  { "end": 67, "start": 61, "type": "ORG" },
-  { "end": 75, "start": 71, "type": "DATE" }
+{"start": 0, "end": 3, "text": "Fed", "lemma": "fed", "pos": "PROPN"},
+{"start": 4, "end": 10, "text": "raises", "lemma": "raise", "pos": "VERB"},
+{"start": 11, "end": 19, "text": "interest", "lemma": "interest", "pos": "NOUN"},
+{"start": 20, "end": 25, "text": "rates", "lemma": "rate", "pos": "NOUN"},
+{"start": 26, "end": 29, "text": "0.5", "lemma": "0.5", "pos": "NUM"},
+{"start": 30, "end": 37, "text": "percent", "lemma": "percent", "pos": "NOUN"},
+{"start": 37, "end": 38, "text": ".", "lemma": ".", "pos": "PUNCT"}
 ]
 ```
 
-| Name    | Type    | Description                                |
-| ------- | ------- | ------------------------------------------ |
-| `end`   | integer | character offset the entity ends **after** |
-| `start` | integer | character offset the entity starts **on**  |
-| `type`  | string  | entity type                                |
+| Name             | Type    | Description                               |
+| ---------------- | ------- | ----------------------------------------- |
+| `end`            | integer | character offset the token ends **after** |
+| `start`          | integer | character offset the token starts **on**  |
+| `text`           | string  |                                           |
+| `orth`           | string  |                                           |
+| `lemma`          | string  |                                           |
+| `pos`            | string  |                                           |
+| `tag`            | string  |                                           |
+| `dep`            | string  |                                           |
+| `text`           | string  |                                           |
+| `ent_type`       | string  |                                           |
+| `ent_iob`        | string  |                                           |
+| `norm`           | string  |                                           |
+| `lower`          | string  |                                           |
+| `shape`          | string  |                                           |
+| `prefix`         | string  |                                           |
+| `suffix`         | string  |                                           |
+| `is_alpha`       | string  |                                           |
+| `is_ascii`       | string  |                                           |
+| `is_digit`       | string  |                                           |
+| `is_lower`       | string  |                                           |
+| `is_upper`       | string  |                                           |
+| `is_title`       | string  |                                           |
+| `is_punct`       | string  |                                           |
+| `is_left_punct`  | string  |                                           |
+| `is_right_punct` | string  |                                           |
+| `is_space`       | string  |                                           |
+| `is_bracket`     | string  |                                           |
+| `is_currency`    | string  |                                           |
+| `like_url`       | string  |                                           |
+| `like_num`       | string  |                                           |
+| `like_email`     | string  |                                           |
+| `is_oov`         | string  |                                           |
+| `is_stop`        | string  |                                           |
+| `cluster`        | string  |                                           |
 
 ```
-curl -s localhost:8000/ent -d '{"text":"Pastafarians are smarter than people with Coca Cola bottles.", "model":"en"}'
+curl -s localhost:8000/tag -d '{"text":"This a test that should split into sentences! This is the second.", "model":"en", "include_sentences": true, "token_filter": ["text", "start", "end", "lemma", "pos"], "sentence_filter": ["text", "start", "end", "tokens"]}'
 ```
 
 ```json
 [
-  {
-    "end": 12,
-    "start": 0,
-    "type": "NORP"
-  },
-  {
-    "end": 51,
-    "start": 42,
-    "type": "ORG"
-  }
+{"text": "This a test that should split into sentences!",
+ "start": 0,
+ "end": 45,
+ "tokens": [
+     {"text": "This", "start": 0, "end": 4, "lemma": "this", "pos": "DET"},
+     {"text": "a", "start": 5, "end": 6, "lemma": "a", "pos": "DET"},
+     {"text": "test", "start": 7, "end": 11, "lemma": "test", "pos": "NOUN"},
+     {"text": "that", "start": 12, "end": 16, "lemma": "that", "pos": "ADJ"},
+     {"text": "should", "start": 17, "end": 23, "lemma": "should", "pos": "VERB"},
+     {"text": "split", "start": 24, "end": 29, "lemma": "split", "pos": "VERB"},
+     {"text": "into", "start": 30, "end": 34, "lemma": "into", "pos": "ADP"},
+     {"text": "sentences", "start": 35, "end": 44, "lemma": "sentence", "pos": "NOUN"},
+     {"text": "!", "start": 44, "end": 45, "lemma": "!", "pos": "PUNCT"}
+ ]},
+{
+    "text": "This is the second.",
+    "start": 46,
+    "end": 65,
+    "tokens": [
+        {"text": "This", "start": 46, "end": 50, "lemma": "this", "pos": "DET"},
+        {"text": "is", "start": 51, "end": 53, "lemma": "be", "pos": "VERB"},
+        {"text": "the", "start": 54, "end": 57, "lemma": "the", "pos": "DET"},
+        {"text": "second", "start": 58, "end": 64, "lemma": "second", "pos": "ADJ"},
+        {"text": ".", "start": 64, "end": 65, "lemma": ".", "pos": "PUNCT"}
+    ]}
 ]
 ```
+| Name             | Type    | Description                                  |
+| ---------------- | ------- | -------------------------------------------- |
+| `end`            | integer | character offset the sentence ends **after** |
+| `start`          | integer | character offset the sentence starts **on**  |
+| `text`           | string  |                                              |
+| `tokens`         | array   |                                              |
 
 ---
 

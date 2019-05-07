@@ -9,8 +9,8 @@ from spacy.symbols import ENT_TYPE, TAG, DEP
 import spacy.about
 import spacy.util
 
-from .parse import Parse, Entities, Sentences
 
+from .parse import Parse, Entities, Sentences, Tokens
 
 MODELS = os.getenv("languages", "").split()
 
@@ -155,6 +155,29 @@ class EntResource(object):
             resp.status = falcon.HTTP_500
 
 
+class TaggerResource(object):
+    """Returns tokens."""
+
+    def on_post(self, req, resp):
+        req_body = req.stream.read()
+        json_data = json.loads(req_body.decode('utf8'))
+        text = json_data.get('text')
+        model_name = json_data.get('model', 'en')
+        include_sentences = json_data.get('include_sentences', False)
+        token_filter = json_data.get('token_filter', [])
+        sentence_filter = json_data.get('sentence_filter', [])
+        try:
+            model = get_model(model_name)
+            tokens = Tokens(model, text, include_sentences,token_filter,sentence_filter)
+            resp.body = json.dumps(tokens.to_json(),
+                                   indent=2)
+            resp.content_type = 'application/json'
+            resp.append_header('Access-Control-Allow-Origin', "*")
+            resp.status = falcon.HTTP_200
+        except Exception as err:
+            resp.status = falcon.HTTP_500
+
+
 class SentsResources(object):
     """Returns sentences"""
 
@@ -169,16 +192,17 @@ class SentsResources(object):
             sentences = Sentences(model, text)
             resp.body = json.dumps(sentences.to_json(), sort_keys=True,
                                    indent=2)
-            resp.content_type = 'text/string'
+            resp.content_type = 'application/json'
             resp.append_header('Access-Control-Allow-Origin', "*")
             resp.status = falcon.HTTP_200
-        except Exception:
+        except Exception as err:
             resp.status = falcon.HTTP_500
 
 
 APP = falcon.API()
 APP.add_route('/dep', DepResource())
 APP.add_route('/ent', EntResource())
+APP.add_route('/tag', TaggerResource())
 APP.add_route('/sents', SentsResources())
 APP.add_route('/{model_name}/schema', SchemaResource())
 APP.add_route('/models', ModelsResource())

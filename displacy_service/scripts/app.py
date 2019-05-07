@@ -11,3 +11,6 @@ def run():
     print("Loaded all models. Starting HTTP server.")
     httpd = simple_server.make_server('0.0.0.0', 8000, APP)
     httpd.serve_forever()
+
+if __name__ == '__main__':
+    run()
