@@ -9,7 +9,7 @@ from spacy.symbols import ENT_TYPE, TAG, DEP
 import spacy.about
 import spacy.util
 
-from .parse import Parse, Entities, Sentences
+from .parse import Parse, Entities, Sentences, SentencesDependencies
 
 
 MODELS = os.getenv("languages", "").split()
