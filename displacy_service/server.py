@@ -176,10 +176,41 @@ class SentsResources(object):
             resp.status = falcon.HTTP_500
 
 
+class SentsDepResources(object):
+    """Returns sentences and dependency parses"""
+
+    def on_post(self, req, resp):
+        req_body = req.bounded_stream.read()
+        json_data = json.loads(req_body.decode('utf8'))
+        text = json_data.get('text')
+        model_name = json_data.get('model', 'en')
+        collapse_punctuation = json_data.get('collapse_punctuation', False)
+        collapse_phrases = json_data.get('collapse_phrases', False)
+        collapse_contractions = json_data.get('collapse_contractions', False)
+
+        try:
+            model = get_model(model_name)
+            sentences = SentencesDependencies(model,
+                                              text,
+                                              collapse_punctuation=collapse_punctuation,
+                                              collapse_phrases=collapse_phrases,
+                                              collapse_contractions=collapse_contractions)
+
+            resp.body = json.dumps(sentences.to_json(),
+                                   sort_keys=True,
+                                   indent=2)
+            resp.content_type = 'text/string'
+            resp.append_header('Access-Control-Allow-Origin', "*")
+            resp.status = falcon.HTTP_200
+        except Exception:
+            resp.status = falcon.HTTP_500
+
+
 APP = falcon.API()
 APP.add_route('/dep', DepResource())
 APP.add_route('/ent', EntResource())
 APP.add_route('/sents', SentsResources())
+APP.add_route('/sents_dep', SentsDepResources())
 APP.add_route('/{model_name}/schema', SchemaResource())
 APP.add_route('/models', ModelsResource())
 APP.add_route('/version', VersionResource())
