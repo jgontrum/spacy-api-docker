@@ -12,6 +12,8 @@ before_install:
 install:
   - travis_wait 30 docker build -t jgontrum/spacyapi:base_v2 .
   - travis_wait 30 docker build -t jgontrum/spacyapi:en_v2 -f docker/en/Dockerfile .
+  - travis_wait 30 docker build -t jgontrum/spacyapi:en_v2_lg -f docker/en/Dockerfile.lg .
+  - travis_wait 30 docker build -t jgontrum/spacyapi:en_v2_md -f docker/en/Dockerfile.md .
   - travis_wait 30 docker build -t jgontrum/spacyapi:de_v2 -f docker/de/Dockerfile .
   - travis_wait 30 docker build -t jgontrum/spacyapi:es_v2 -f docker/es/Dockerfile .
   - travis_wait 30 docker build -t jgontrum/spacyapi:fr_v2 -f docker/fr/Dockerfile .
@@ -23,6 +25,8 @@ install:
 after_success:
   - docker push jgontrum/spacyapi:base_v2
   - docker push jgontrum/spacyapi:en_v2
+  - docker push jgontrum/spacyapi:en_v2_lg
+  - docker push jgontrum/spacyapi:en_v2_md
   - docker push jgontrum/spacyapi:de_v2
   - docker push jgontrum/spacyapi:es_v2
   - docker push jgontrum/spacyapi:fr_v2
