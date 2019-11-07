@@ -10,7 +10,7 @@
 - Dependency parsing visualisation with [displaCy](https://demos.explosion.ai/displacy/).
 - Docker images for **English**, **German**, **Spanish**, **Italian**, **Dutch** and **French**.
 - Automated builds to stay up to date with spaCy.
-- Current spaCy version: 2.0.16
+- Current spaCy version: 2.2.2
 
 Please note that this is a completely new API and is incompatible with the previous one. If you still need them, use `jgontrum/spacyapi:en-legacy` or `jgontrum/spacyapi:de-legacy`.
 
@@ -22,15 +22,17 @@ _Documentation, API- and frontend code based upon [spaCy REST services](https://
 
 | Image                       | Description                                                       |
 | --------------------------- | ----------------------------------------------------------------- |
-| jgontrum/spacyapi:base_v2   | Base image for spaCy 2.0, containing no language model            |
-| jgontrum/spacyapi:en_v2     | English language model, spaCy 2.0                                 |
-| jgontrum/spacyapi:de_v2     | German language model, spaCy 2.0                                  |
-| jgontrum/spacyapi:es_v2     | Spanish language model, spaCy 2.0                                 |
-| jgontrum/spacyapi:fr_v2     | French language model, spaCy 2.0                                  |
-| jgontrum/spacyapi:pt_v2     | Portuguese language model, spaCy 2.0                              |
-| jgontrum/spacyapi:it_v2     | Italian language model, spaCy 2.0                                 |
-| jgontrum/spacyapi:nl_v2     | Dutch language model, spaCy 2.0                                   |
-| jgontrum/spacyapi:all_v2    | Contains EN, DE, ES, PT, NL, IT and FR language models, spaCy 2.0 |
+| jgontrum/spacyapi:base_v2   | Base image for spaCy 2.2, containing no language model            |
+| jgontrum/spacyapi:en_v2     | English language model, spaCy 2.2                                 |
+| jgontrum/spacyapi:en_v2_lg  | English language model, large, spaCy 2.2                          |
+| jgontrum/spacyapi:en_v2_md  | English language model, medium,  spaCy 2.2                        |
+| jgontrum/spacyapi:de_v2     | German language model, spaCy 2.2                                  |
+| jgontrum/spacyapi:es_v2     | Spanish language model, spaCy 2.2                                 |
+| jgontrum/spacyapi:fr_v2     | French language model, spaCy 2.2                                  |
+| jgontrum/spacyapi:pt_v2     | Portuguese language model, spaCy 2.2                              |
+| jgontrum/spacyapi:it_v2     | Italian language model, spaCy 2.2                                 |
+| jgontrum/spacyapi:nl_v2     | Dutch language model, spaCy 2.2                                   |
+| jgontrum/spacyapi:all_v2    | Contains EN, DE, ES, PT, NL, IT and FR language models, spaCy 2.2 |
 | _OLD RELEASES_              |                                                                   |
 | jgontrum/spacyapi:base      | Base image, containing no language model                          |
 | jgontrum/spacyapi:latest    | English language model                                            |
