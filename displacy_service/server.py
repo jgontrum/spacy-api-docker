@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from pathlib import Path
 import falcon
 import spacy
 import json
@@ -186,7 +185,7 @@ class SentsDepResources(object):
         model_name = json_data.get('model', 'en')
         collapse_punctuation = json_data.get('collapse_punctuation', False)
         collapse_phrases = json_data.get('collapse_phrases', False)
-        collapse_contractions = json_data.get('collapse_contractions', False)
+        special_cases = json_data.get('special_cases', [])
 
         try:
             model = get_model(model_name)
@@ -194,7 +193,7 @@ class SentsDepResources(object):
                                               text,
                                               collapse_punctuation=collapse_punctuation,
                                               collapse_phrases=collapse_phrases,
-                                              collapse_contractions=collapse_contractions)
+                                              special_cases=special_cases)
 
             resp.body = json.dumps(sentences.to_json(),
                                    sort_keys=True,
