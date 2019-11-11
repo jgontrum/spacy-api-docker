@@ -1,6 +1,3 @@
-from spacy.symbols import ORTH
-
-
 class Parse(object):
     def __init__(self, nlp, text, collapse_punctuation, collapse_phrases):
         self.doc = nlp(text)
@@ -76,11 +73,7 @@ class Sentences(object):
 
 
 class SentencesDependencies(object):
-    def __init__(self, nlp, text, collapse_punctuation, collapse_phrases, special_cases):
-
-        if special_cases:
-            for special_case in special_cases:
-                nlp.tokenizer.add_special_case(special_case, [{ORTH: special_case}])
+    def __init__(self, nlp, text, collapse_punctuation, collapse_phrases):
 
         self.doc = nlp(text)
 

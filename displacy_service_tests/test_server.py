@@ -1,65 +1,58 @@
 import falcon.testing
+import pytest
 import json
 
-from displacy_service.server import APP
+from displacy_service.server import APP, MODELS
 
 
-class TestAPI(falcon.testing.TestCase):
-    def __init__(self):
-        self.api = APP
+model = MODELS[0]
 
 
-def test_deps():
-    test_api = TestAPI()
-    result = test_api.simulate_post(
+@pytest.fixture()
+def api():
+    return falcon.testing.TestClient(APP)
+
+
+def test_deps(api):
+    result = api.simulate_post(
         path='/dep',
-        body='''{"text": "This is a test.", "model": "en",
-             "collapse_punctuation": false,
-             "collapse_phrases": false}'''
+        body='{{"text": "This is a test.", "model": "{model}", "collapse_punctuation": false, "collapse_phrases": false}}'.format(model=model)
     )
     result = json.loads(result.text)
     words = [w['text'] for w in result['words']]
     assert words == ["This", "is", "a", "test", "."]
 
 
-def test_ents():
-    test_api = TestAPI()
-    result = test_api.simulate_post(
+def test_ents(api):
+    result = api.simulate_post(
         path='/ent',
-        body='''{"text": "What a great company Google is.",
-                "model": "en"}''')
+        body='{{"text": "What a great company Google is.", "model": "{model}"}}'.format(model=model))
     ents = json.loads(result.text)
     assert ents == [
         {"start": 21, "end": 27, "type": "ORG", "text": "Google"}]
 
 
-def test_sents():
-    test_api = TestAPI()
-    sentences = test_api.simulate_post(
-        path='/sent',
-        body='''{"text": "This a test that should split into sentences!
-        This is the second. Is this the third?", "model": "en"}'''
+def test_sents(api):
+    sentences = api.simulate_post(
+        path='/sents',
+        body='{{"text": "This a test that should split into sentences! This is the second. Is this the third?", "model": "{model}"}}'.format(model=model)
     )
 
-    assert sentences == ['This a test that should split into sentences!',
-                         'This is the second.', 'Is this the third?']
+    assert sentences.json == ['This a test that should split into sentences!', 'This is the second.', 'Is this the third?']
 
 
-def test_sents_dep():
-    test_api = TestAPI()
-    sentence_parse = test_api.simulate_post(
+def test_sents_dep(api):
+    sentence_parse = api.simulate_post(
         path='/sents_dep',
-        body='''{"text": "This a test that should split into sentences!
-        This is the second. Is this the third?", "model": "en",
-        "collapse_punctuation": false, "collapse_phrases": false}'''
+        body='{{"text": "This a test that should split into sentences! This is the second. Is this the third?", "model": "{model}", "collapse_punctuation": false, "collapse_phrases": false}}'.format(model=model)
     )
-    sentences = [sp["sentence"] for sp in sentence_parse]
+    sentences = [sp["sentence"] for sp in sentence_parse.json]
     assert sentences == [
         "This a test that should split into sentences!",
         "This is the second.",
         "Is this the third?",
     ]
-    words = [[w["text"] for w in sp["dep_parse"]["words"]] for sp in sentence_parse]
+    words = [[w["text"] for w in sp["dep_parse"]["words"]] for sp in sentence_parse.json]
     assert words == [
         ["This", "a", "test", "that", "should", "split", "into", "sentences", "!"],
         ["This", "is", "the", "second", "."],

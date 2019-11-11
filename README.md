@@ -67,6 +67,30 @@ services:
 
 ```
 
+### Running Tests
+
+In order to run unit tests locally `pytest` is included.
+
+`docker run -it jgontrum/spacyapi:en_v2 app/env/bin/pytest app/displacy_service_tests`
+
+### Special Cases
+
+The API includes rudimentary support for specifying [special cases](https://spacy.io/usage/linguistic-features#special-cases)
+for your deployment. Currently only basic special cases are supported; for example, in the spaCy parlance:
+
+```python
+tokenizer.add_special_case("isn't", [{ORTH: "isn't"}])
+```
+
+They can be supplied in an environment variable corresponding to the desired language model. For example, `en_special_cases`
+or `en_core_web_lg_special_cases`. They are configured as a single comma-delimited string, such as `"isn't,doesn't,won't"`.
+
+Use the following syntax to specify basic special case rules, such as for preserving contractions:
+
+`docker run -p "127.0.0.1:8080:80" -e en_special_cases="isn't,doesn't" jgontrum/spacyapi:en_v2`
+
+You can also configure this in a `.env` file if using `docker-compose` as above.
+
 ---
 
 ## REST API Documentation

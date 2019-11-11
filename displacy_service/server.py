@@ -185,15 +185,13 @@ class SentsDepResources(object):
         model_name = json_data.get('model', 'en')
         collapse_punctuation = json_data.get('collapse_punctuation', False)
         collapse_phrases = json_data.get('collapse_phrases', False)
-        special_cases = json_data.get('special_cases', [])
 
         try:
             model = get_model(model_name)
             sentences = SentencesDependencies(model,
                                               text,
                                               collapse_punctuation=collapse_punctuation,
-                                              collapse_phrases=collapse_phrases,
-                                              special_cases=special_cases)
+                                              collapse_phrases=collapse_phrases)
 
             resp.body = json.dumps(sentences.to_json(),
                                    sort_keys=True,
