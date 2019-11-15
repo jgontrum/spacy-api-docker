@@ -58,3 +58,18 @@ def test_sents_dep(api):
         ["This", "is", "the", "second", "."],
         ["Is", "this", "the", "third", "?"],
     ]
+
+
+@pytest.mark.parametrize('endpoint, expected_message', [
+    ('/dep', 'Dependency parsing failed'),
+    ('/ent', 'Text parsing failed'),
+    ('/sents', 'Sentence tokenization failed'),
+    ('/sents_dep', 'Sentence tokenization and Dependency parsing failed'),
+])
+def test_bad_model_error_handling(endpoint, expected_message, api):
+    response = api.simulate_post(
+        path=endpoint,
+        body='{"text": "Here is some text for testing.", "model": "fake_model"}'
+    )
+    assert expected_message == response.json['title']
+    assert "Can't find model 'fake_model'." in response.json["description"]

@@ -59,8 +59,10 @@ class ModelsResource(object):
             resp.content_type = 'text/string'
             resp.append_header('Access-Control-Allow-Origin', "*")
             resp.status = falcon.HTTP_200
-        except Exception:
-            resp.status = falcon.HTTP_500
+        except Exception as e:
+            raise falcon.HTTPInternalServerError(
+                'Models retrieval failed',
+                '{}'.format(e))
 
 
 class VersionResource(object):
@@ -77,8 +79,10 @@ class VersionResource(object):
             resp.content_type = 'text/string'
             resp.append_header('Access-Control-Allow-Origin', "*")
             resp.status = falcon.HTTP_200
-        except Exception:
-            resp.status = falcon.HTTP_500
+        except Exception as e:
+            raise falcon.HTTPInternalServerError(
+                'Version retrieval failed',
+                '{}'.format(e))
 
 
 class SchemaResource(object):
@@ -150,8 +154,10 @@ class EntResource(object):
             resp.content_type = 'text/string'
             resp.append_header('Access-Control-Allow-Origin', "*")
             resp.status = falcon.HTTP_200
-        except Exception:
-            resp.status = falcon.HTTP_500
+        except Exception as e:
+            raise falcon.HTTPBadRequest(
+                'Text parsing failed',
+                '{}'.format(e))
 
 
 class SentsResources(object):
@@ -171,8 +177,10 @@ class SentsResources(object):
             resp.content_type = 'text/string'
             resp.append_header('Access-Control-Allow-Origin', "*")
             resp.status = falcon.HTTP_200
-        except Exception:
-            resp.status = falcon.HTTP_500
+        except Exception as e:
+            raise falcon.HTTPBadRequest(
+                'Sentence tokenization failed',
+                '{}'.format(e))
 
 
 class SentsDepResources(object):
@@ -199,8 +207,10 @@ class SentsDepResources(object):
             resp.content_type = 'text/string'
             resp.append_header('Access-Control-Allow-Origin', "*")
             resp.status = falcon.HTTP_200
-        except Exception:
-            resp.status = falcon.HTTP_500
+        except Exception as e:
+            raise falcon.HTTPBadRequest(
+                'Sentence tokenization and Dependency parsing failed',
+                '{}'.format(e))
 
 
 APP = falcon.API()
