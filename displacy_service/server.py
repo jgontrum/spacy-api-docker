@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from pathlib import Path
 import falcon
 import spacy
 import json
@@ -9,7 +8,7 @@ from spacy.symbols import ENT_TYPE, TAG, DEP
 import spacy.about
 import spacy.util
 
-from .parse import Parse, Entities, Sentences
+from .parse import Parse, Entities, Sentences, SentencesDependencies
 
 
 MODELS = os.getenv("languages", "").split()
@@ -60,8 +59,10 @@ class ModelsResource(object):
             resp.content_type = 'text/string'
             resp.append_header('Access-Control-Allow-Origin', "*")
             resp.status = falcon.HTTP_200
-        except Exception:
-            resp.status = falcon.HTTP_500
+        except Exception as e:
+            raise falcon.HTTPInternalServerError(
+                'Models retrieval failed',
+                '{}'.format(e))
 
 
 class VersionResource(object):
@@ -78,8 +79,10 @@ class VersionResource(object):
             resp.content_type = 'text/string'
             resp.append_header('Access-Control-Allow-Origin', "*")
             resp.status = falcon.HTTP_200
-        except Exception:
-            resp.status = falcon.HTTP_500
+        except Exception as e:
+            raise falcon.HTTPInternalServerError(
+                'Version retrieval failed',
+                '{}'.format(e))
 
 
 class SchemaResource(object):
@@ -151,8 +154,10 @@ class EntResource(object):
             resp.content_type = 'text/string'
             resp.append_header('Access-Control-Allow-Origin', "*")
             resp.status = falcon.HTTP_200
-        except Exception:
-            resp.status = falcon.HTTP_500
+        except Exception as e:
+            raise falcon.HTTPBadRequest(
+                'Text parsing failed',
+                '{}'.format(e))
 
 
 class SentsResources(object):
@@ -172,14 +177,47 @@ class SentsResources(object):
             resp.content_type = 'text/string'
             resp.append_header('Access-Control-Allow-Origin', "*")
             resp.status = falcon.HTTP_200
-        except Exception:
-            resp.status = falcon.HTTP_500
+        except Exception as e:
+            raise falcon.HTTPBadRequest(
+                'Sentence tokenization failed',
+                '{}'.format(e))
+
+
+class SentsDepResources(object):
+    """Returns sentences and dependency parses"""
+
+    def on_post(self, req, resp):
+        req_body = req.bounded_stream.read()
+        json_data = json.loads(req_body.decode('utf8'))
+        text = json_data.get('text')
+        model_name = json_data.get('model', 'en')
+        collapse_punctuation = json_data.get('collapse_punctuation', False)
+        collapse_phrases = json_data.get('collapse_phrases', False)
+
+        try:
+            model = get_model(model_name)
+            sentences = SentencesDependencies(model,
+                                              text,
+                                              collapse_punctuation=collapse_punctuation,
+                                              collapse_phrases=collapse_phrases)
+
+            resp.body = json.dumps(sentences.to_json(),
+                                   sort_keys=True,
+                                   indent=2)
+            resp.content_type = 'text/string'
+            resp.append_header('Access-Control-Allow-Origin', "*")
+            resp.status = falcon.HTTP_200
+        except Exception as e:
+            raise falcon.HTTPBadRequest(
+                'Sentence tokenization and Dependency parsing failed',
+                '{}'.format(e))
 
 
 APP = falcon.API()
 APP.add_route('/dep', DepResource())
 APP.add_route('/ent', EntResource())
 APP.add_route('/sents', SentsResources())
+APP.add_route('/sents_dep', SentsDepResources())
 APP.add_route('/{model_name}/schema', SchemaResource())
 APP.add_route('/models', ModelsResource())
 APP.add_route('/version', VersionResource())

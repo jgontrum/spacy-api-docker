@@ -22,7 +22,7 @@ def test_collapse_punct(nlp):
     assert len(json_model['words']) == 5
     assert len(json_model['arcs']) == 4
     assert [w['text'] for w in json_model['words']] == [u'Hello,', u'this', u'is', u'a', u'parse.']
-    
+
 
 def test_collapse_phrases(nlp):
     parse = Parse(nlp, u'This example is a parse.', False, True)

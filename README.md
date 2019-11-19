@@ -67,6 +67,30 @@ services:
 
 ```
 
+### Running Tests
+
+In order to run unit tests locally `pytest` is included.
+
+`docker run -it jgontrum/spacyapi:en_v2 app/env/bin/pytest app/displacy_service_tests`
+
+### Special Cases
+
+The API includes rudimentary support for specifying [special cases](https://spacy.io/usage/linguistic-features#special-cases)
+for your deployment. Currently only basic special cases are supported; for example, in the spaCy parlance:
+
+```python
+tokenizer.add_special_case("isn't", [{ORTH: "isn't"}])
+```
+
+They can be supplied in an environment variable corresponding to the desired language model. For example, `en_special_cases`
+or `en_core_web_lg_special_cases`. They are configured as a single comma-delimited string, such as `"isn't,doesn't,won't"`.
+
+Use the following syntax to specify basic special case rules, such as for preserving contractions:
+
+`docker run -p "127.0.0.1:8080:80" -e en_special_cases="isn't,doesn't" jgontrum/spacyapi:en_v2`
+
+You can also configure this in a `.env` file if using `docker-compose` as above.
+
 ---
 
 ## REST API Documentation
@@ -330,6 +354,250 @@ Example response:
 
 ```json
 ["In 2012 I was a mediocre developer.", "But today I am at least a bit better."]
+```
+
+---
+
+### `POST` `/sents_dep/`
+
+Combination of `/sents/` and `/dep/`, returns sentences and dependency parses
+
+Example request:
+
+```json
+{
+  "text": "In 2012 I was a mediocre developer. But today I am at least a bit better.",
+  "model": "en"
+}
+```
+
+| Name    | Type   | Description                                           |
+| ------- | ------ | ----------------------------------------------------- |
+| `text`  | string | text to be parsed                                     |
+| `model` | string | identifier string for a model installed on the server |
+
+Example request using the Python [Requests library](http://docs.python-requests.org/en/master/):
+
+```python
+import json
+import requests
+
+url = "http://localhost:8000/sents_dep"
+message_text = "In 2012 I was a mediocre developer. But today I am at least a bit better."
+headers = {'content-type': 'application/json'}
+d = {'text': message_text, 'model': 'en'}
+
+response = requests.post(url, data=json.dumps(d), headers=headers)
+r = response.json()
+```
+
+Example response:
+
+```json
+[
+  {
+    "sentence": "In 2012 I was a mediocre developer.",
+    "dep_parse": {
+      "arcs": [
+        {
+          "dir": "left",
+          "end": 3,
+          "label": "prep",
+          "start": 0,
+          "text": "In"
+        },
+        {
+          "dir": "right",
+          "end": 1,
+          "label": "pobj",
+          "start": 0,
+          "text": "2012"
+        },
+        {
+          "dir": "left",
+          "end": 3,
+          "label": "nsubj",
+          "start": 2,
+          "text": "I"
+        },
+        {
+          "dir": "left",
+          "end": 6,
+          "label": "det",
+          "start": 4,
+          "text": "a"
+        },
+        {
+          "dir": "left",
+          "end": 6,
+          "label": "amod",
+          "start": 5,
+          "text": "mediocre"
+        },
+        {
+          "dir": "right",
+          "end": 6,
+          "label": "attr",
+          "start": 3,
+          "text": "developer"
+        },
+        {
+          "dir": "right",
+          "end": 7,
+          "label": "punct",
+          "start": 3,
+          "text": "."
+        }
+      ],
+      "words": [
+        {
+          "tag": "IN",
+          "text": "In"
+        },
+        {
+          "tag": "CD",
+          "text": "2012"
+        },
+        {
+          "tag": "PRP",
+          "text": "I"
+        },
+        {
+          "tag": "VBD",
+          "text": "was"
+        },
+        {
+          "tag": "DT",
+          "text": "a"
+        },
+        {
+          "tag": "JJ",
+          "text": "mediocre"
+        },
+        {
+          "tag": "NN",
+          "text": "developer"
+        },
+        {
+          "tag": ".",
+          "text": "."
+        }
+      ]
+    }
+  },
+  {
+    "sentence": "But today I am at least a bit better.",
+    "dep_parse": {
+      "arcs": [
+        {
+          "dir": "left",
+          "end": 11,
+          "label": "cc",
+          "start": 8,
+          "text": "But"
+        },
+        {
+          "dir": "left",
+          "end": 11,
+          "label": "npadvmod",
+          "start": 9,
+          "text": "today"
+        },
+        {
+          "dir": "left",
+          "end": 11,
+          "label": "nsubj",
+          "start": 10,
+          "text": "I"
+        },
+        {
+          "dir": "left",
+          "end": 13,
+          "label": "advmod",
+          "start": 12,
+          "text": "at"
+        },
+        {
+          "dir": "left",
+          "end": 15,
+          "label": "advmod",
+          "start": 13,
+          "text": "least"
+        },
+        {
+          "dir": "left",
+          "end": 15,
+          "label": "det",
+          "start": 14,
+          "text": "a"
+        },
+        {
+          "dir": "left",
+          "end": 16,
+          "label": "npadvmod",
+          "start": 15,
+          "text": "bit"
+        },
+        {
+          "dir": "right",
+          "end": 16,
+          "label": "acomp",
+          "start": 11,
+          "text": "better"
+        },
+        {
+          "dir": "right",
+          "end": 17,
+          "label": "punct",
+          "start": 11,
+          "text": "."
+        }
+      ],
+      "words": [
+        {
+          "tag": "CC",
+          "text": "But"
+        },
+        {
+          "tag": "NN",
+          "text": "today"
+        },
+        {
+          "tag": "PRP",
+          "text": "I"
+        },
+        {
+          "tag": "VBP",
+          "text": "am"
+        },
+        {
+          "tag": "IN",
+          "text": "at"
+        },
+        {
+          "tag": "JJS",
+          "text": "least"
+        },
+        {
+          "tag": "DT",
+          "text": "a"
+        },
+        {
+          "tag": "NN",
+          "text": "bit"
+        },
+        {
+          "tag": "RBR",
+          "text": "better"
+        },
+        {
+          "tag": ".",
+          "text": "."
+        }
+      ]
+    }
+  }
+]
 ```
 
 ### `GET` `/models`
