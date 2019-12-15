@@ -191,8 +191,8 @@ class SentsDepResources(object):
         json_data = json.loads(req_body.decode('utf8'))
         text = json_data.get('text')
         model_name = json_data.get('model', 'en')
-        collapse_punctuation = json_data.get('collapse_punctuation', False)
-        collapse_phrases = json_data.get('collapse_phrases', False)
+        collapse_punctuation = json_data.get('collapse_punctuation', True)
+        collapse_phrases = json_data.get('collapse_phrases', True)
 
         try:
             model = get_model(model_name)
