@@ -101,7 +101,7 @@ displaCy frontend is available here.
 
 ---
 
-### `POST` `/dep/`
+### `POST` `/dep`
 
 Example request:
 
@@ -251,7 +251,7 @@ curl -s localhost:8000/dep -d '{"text":"Pastafarians are smarter than people wit
 
 ---
 
-### `POST` `/ent/`
+### `POST` `/ent`
 
 Example request:
 
@@ -319,7 +319,7 @@ curl -s localhost:8000/ent -d '{"text":"Pastafarians are smarter than people wit
 
 ---
 
-### `POST` `/sents/`
+### `POST` `/sents`
 
 Example request:
 
@@ -358,9 +358,9 @@ Example response:
 
 ---
 
-### `POST` `/sents_dep/`
+### `POST` `/sents_dep`
 
-Combination of `/sents/` and `/dep/`, returns sentences and dependency parses
+Combination of `/sents` and `/dep`, returns sentences and dependency parses
 
 Example request:
 
@@ -618,7 +618,7 @@ Example response:
 
 ---
 
-### `GET` `/{model}/schema/`
+### `GET` `/{model}/schema`
 
 Example request:
 
