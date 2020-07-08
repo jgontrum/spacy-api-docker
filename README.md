@@ -2,6 +2,13 @@
 
 **Ready-to-use Docker images for the [spaCy NLP library](https://github.com/explosion/spaCy).**
 
+---
+**[spaCy API Docker](https://github.com/jgontrum/spacy-api-docker) is being sponsored by the following tool; please help to support us by taking a look and signing up to a free trial**
+
+
+[<img src="https://images.gitads.io/spacy-api-docker" alt="GitAds"/>](https://tracking.gitads.io/?repo=spacy-api-docker)
+---
+
 ### Features
 
 - Use the awesome spaCy NLP framework with other programming languages.
