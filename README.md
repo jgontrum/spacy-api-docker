@@ -314,11 +314,13 @@ curl -s localhost:8000/ent -d '{"text":"Pastafarians are smarter than people wit
   {
     "end": 12,
     "start": 0,
+    "text": "Pastafarians",
     "type": "NORP"
   },
   {
     "end": 51,
     "start": 42,
+    "text": "Coca Cola",
     "type": "ORG"
   }
 ]
@@ -663,6 +665,6 @@ Example response:
 
 ```json
 {
-  "spacy": "1.9.0"
+  "spacy": "2.2.4"
 }
 ```
