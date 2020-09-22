@@ -134,7 +134,7 @@ Example request using the Python [Requests library](http://docs.python-requests.
 import json
 import requests
 
-url = "http://localhost:8000/dep"
+url = "http://localhost:8080/dep"
 message_text = "They ate the pizza with anchovies"
 headers = {'content-type': 'application/json'}
 d = {'text': message_text, 'model': 'en'}
@@ -180,7 +180,7 @@ Example response:
 Curl command:
 
 ```
-curl -s localhost:8000/dep -d '{"text":"Pastafarians are smarter than people with Coca Cola bottles.", "model":"en"}'
+curl -s localhost:8080/dep -d '{"text":"Pastafarians are smarter than people with Coca Cola bottles.", "model":"en"}'
 ```
 
 ```json
@@ -280,7 +280,7 @@ Example request using the Python [Requests library](http://docs.python-requests.
 import json
 import requests
 
-url = "http://localhost:8000/ent"
+url = "http://localhost:8080/ent"
 message_text = "When Sebastian Thrun started working on self-driving cars at Google in 2007, few people outside of the company took him seriously."
 headers = {'content-type': 'application/json'}
 d = {'text': message_text, 'model': 'en'}
@@ -306,7 +306,7 @@ Example response:
 | `type`  | string  | entity type                                |
 
 ```
-curl -s localhost:8000/ent -d '{"text":"Pastafarians are smarter than people with Coca Cola bottles.", "model":"en"}'
+curl -s localhost:8080/ent -d '{"text":"Pastafarians are smarter than people with Coca Cola bottles.", "model":"en"}'
 ```
 
 ```json
@@ -350,7 +350,7 @@ Example request using the Python [Requests library](http://docs.python-requests.
 import json
 import requests
 
-url = "http://localhost:8000/sents"
+url = "http://localhost:8080/sents"
 message_text = "In 2012 I was a mediocre developer. But today I am at least a bit better."
 headers = {'content-type': 'application/json'}
 d = {'text': message_text, 'model': 'en'}
@@ -391,7 +391,7 @@ Example request using the Python [Requests library](http://docs.python-requests.
 import json
 import requests
 
-url = "http://localhost:8000/sents_dep"
+url = "http://localhost:8080/sents_dep"
 message_text = "In 2012 I was a mediocre developer. But today I am at least a bit better."
 headers = {'content-type': 'application/json'}
 d = {'text': message_text, 'model': 'en'}
