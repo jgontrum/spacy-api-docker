@@ -1,6 +1,4 @@
-from enum import Enum
-from logging import NOTSET, CRITICAL, ERROR, WARNING, INFO, DEBUG
-from typing import Optional, List
+from typing import Optional, List, Literal
 
 import requests
 from pydantic import BaseSettings
@@ -15,15 +13,6 @@ if env.get("DOPPLER_TOKEN"):
         env[key] = value
 
 
-class LogLevel(int, Enum):
-    critical = CRITICAL
-    error = ERROR
-    warning = WARNING
-    info = INFO
-    debug = DEBUG
-    notset = NOTSET
-
-
 class Settings(BaseSettings):
     name: str = "spaCy Service API"
     target: str = "local"
@@ -31,5 +20,6 @@ class Settings(BaseSettings):
 
     allowed_origins: List[str] = []
 
-    logging_level: LogLevel = LogLevel.info
+    logging_level: Literal["critical", "error", "warning", "info", "debug"] = "info"
     sentry: Optional[str] = None
+    spacy_model: str = "en_core_web_sm"

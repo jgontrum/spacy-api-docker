@@ -1,11 +1,9 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from .handlers import info
+from .handlers import info, nlp
 from .utils import settings
 
-
-# Create the service and hide the documentation if it is deployed in production
 app = FastAPI(title=settings.name, version=settings.version)
 
 # Configure CORS
@@ -18,8 +16,9 @@ if settings.allowed_origins:
         allow_headers=["*"],
     )
 
-# Define the router
+# Define the routers
 app.include_router(info.router)
+app.include_router(nlp.router, prefix="/nlp")
 
 
 def start():

@@ -1,4 +1,5 @@
 import logging
+from logging import CRITICAL, ERROR, WARNING, INFO, DEBUG
 
 from .models.settings import Settings
 
@@ -19,7 +20,15 @@ formatter = logging.Formatter("%(asctime)s | %(name)s | %(levelname)s : %(messag
 ch.setFormatter(formatter)
 logger = logging.getLogger("spacy_service")
 logger.addHandler(ch)
-logger.setLevel(settings.logging_level.value)
+logger.setLevel(
+    {
+        "critical": CRITICAL,
+        "error": ERROR,
+        "warning": WARNING,
+        "info": INFO,
+        "debug": DEBUG,
+    }.get(settings.logging_level, INFO)
+)
 
 
 class LoggerMixin:
