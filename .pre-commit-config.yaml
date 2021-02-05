@@ -1,12 +1,14 @@
+fail_fast: false
+
 repos:
   - repo: git@github.com:humitos/mirrors-autoflake.git
-    rev: v1.1
+    rev: v1.3
     hooks:
       - id: autoflake
-        args: ['--in-place', "--remove-all-unused-imports"]
+        args: ['--in-place', '--remove-all-unused-imports', '--remove-unused-variable']
 
   - repo: git://github.com/pre-commit/pre-commit-hooks
-    rev: master
+    rev: v3.4.0
     hooks:
       - id: check-json
       - id: check-merge-conflict
@@ -15,14 +17,14 @@ repos:
         args: [--markdown-linebreak-ext=md]
 
   - repo: https://gitlab.com/pycqa/flake8
-    rev: master
+    rev: 3.8.4
     hooks:
       - id: flake8
         types: [python]
         args: ["--ignore=E203,W503,E501"]
 
-  - repo: https://github.com/ambv/black
-    rev: stable
+  - repo: https://github.com/psf/black
+    rev: 20.8b1
     hooks:
       - id: black
         language_version: python3.8
