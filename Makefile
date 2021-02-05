@@ -1,15 +1,12 @@
-.PHONY: clean start build-and-push test
+.PHONY: clean start generate_typescript docker
 
-PYTHON3=python3.6
+all: dashboardapi.egg-info
 
-all: env/bin/python
-
-env/bin/python:
-	$(PYTHON3) -m venv env
-	env/bin/pip install --upgrade pip
-	env/bin/pip install wheel
-	env/bin/pip install -r requirements.txt
-	env/bin/python setup.py develop
+dashboardapi.egg-info:
+	poetry install
+	poetry run pre-commit install
+	poetry run configure_gitlab 2> /dev/null
+	echo "Python is installed in: `poetry run which python`"
 
 clean:
 	rm -rfv bin develop-eggs dist downloads eggs env parts .cache .scannerwork
@@ -18,10 +15,13 @@ clean:
 	find . -name '*.pyo' -exec rm -fv {} \;
 	find . -depth -name '*.egg-info' -exec rm -rfv {} \;
 	find . -depth -name '__pycache__' -exec rm -rfv {} \;
+	poetry env remove `poetry run which python`
 
-test: env/bin/python
-	languages=en env/bin/download_models
-	env/bin/py.test displacy_service_tests
+start: dashboardapi.egg-info
+	doppler run -- poetry run api
 
-start: env/bin/python
-	env/bin/run_server
+generate_typescript: dashboardapi.egg-info
+	poetry run generate_ts_models
+
+docker:
+	docker build -t dashboardapi .
