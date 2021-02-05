@@ -1,11 +1,10 @@
-.PHONY: clean start generate_typescript docker
+.PHONY: clean start
 
-all: dashboardapi.egg-info
+all: spacy_service.egg-info
 
-dashboardapi.egg-info:
+spacy_service.egg-info:
 	poetry install
 	poetry run pre-commit install
-	poetry run configure_gitlab 2> /dev/null
 	echo "Python is installed in: `poetry run which python`"
 
 clean:
@@ -17,11 +16,5 @@ clean:
 	find . -depth -name '__pycache__' -exec rm -rfv {} \;
 	poetry env remove `poetry run which python`
 
-start: dashboardapi.egg-info
+start: spacy_service.egg-info
 	doppler run -- poetry run api
-
-generate_typescript: dashboardapi.egg-info
-	poetry run generate_ts_models
-
-docker:
-	docker build -t dashboardapi .
