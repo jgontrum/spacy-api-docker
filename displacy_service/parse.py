@@ -45,6 +45,15 @@ class Parse(object):
                         'text': str(word),
                         'dir': 'right'
                     })
+            else:
+                arcs.append(
+                    {
+                        'start': word.head.i,
+                        'end': word.i,
+                        'label': word.dep_,
+                        'text': str(word),
+                        'dir': 'root'
+                    })
         return {'words': words, 'arcs': arcs}
 
 
@@ -122,6 +131,15 @@ class SentencesDependencies(object):
                             'label': word.dep_,
                             'text': str(word),
                             'dir': 'right'
+                        })
+                else:
+                    arcs.append(
+                        {
+                            'start': word.head.i,
+                            'end': word.i,
+                            'label': word.dep_,
+                            'text': str(word),
+                            'dir': 'root'
                         })
 
             sents.append({'sentence': sent.string.strip(),
