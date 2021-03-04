@@ -59,6 +59,26 @@ def test_sents_dep(api):
         ["Is", "this", "the", "third", "?"],
     ]
 
+    arcs = [[arc for arc in sp['dep_parse']['arcs']] for sp in sentence_parse.json]
+    assert arcs == [[{'start': 0, 'end': 2, 'label': 'det', 'text': 'This', 'dir': 'left'},
+                     {'start': 1, 'end': 2, 'label': 'det', 'text': 'a', 'dir': 'left'},
+                     {'start': 2, 'end': 2, 'label': 'ROOT', 'text': 'test', 'dir': 'root'},
+                     {'start': 3, 'end': 5, 'label': 'nsubj', 'text': 'that', 'dir': 'left'},
+                     {'start': 4, 'end': 5, 'label': 'aux', 'text': 'should', 'dir': 'left'},
+                     {'start': 2, 'end': 5, 'label': 'relcl', 'text': 'split', 'dir': 'right'},
+                     {'start': 5, 'end': 6, 'label': 'prep', 'text': 'into', 'dir': 'right'},
+                     {'start': 6, 'end': 7, 'label': 'pobj', 'text': 'sentences', 'dir': 'right'},
+                     {'start': 2, 'end': 8, 'label': 'punct', 'text': '!', 'dir': 'right'}],
+                    [{'start': 9, 'end': 10, 'label': 'nsubj', 'text': 'This', 'dir': 'left'},
+                     {'start': 10, 'end': 10, 'label': 'ROOT', 'text': 'is', 'dir': 'root'},
+                     {'start': 11, 'end': 12, 'label': 'det', 'text': 'the', 'dir': 'left'},
+                     {'start': 10, 'end': 12, 'label': 'attr', 'text': 'second', 'dir': 'right'},
+                     {'start': 10, 'end': 13, 'label': 'punct', 'text': '.', 'dir': 'right'}],
+                    [{'start': 14, 'end': 14, 'label': 'ROOT', 'text': 'Is', 'dir': 'root'},
+                     {'start': 14, 'end': 15, 'label': 'nsubj', 'text': 'this', 'dir': 'right'},
+                     {'start': 16, 'end': 17, 'label': 'det', 'text': 'the', 'dir': 'left'},
+                     {'start': 14, 'end': 17, 'label': 'attr', 'text': 'third', 'dir': 'right'},
+                     {'start': 14, 'end': 18, 'label': 'punct', 'text': '?', 'dir': 'right'}]]
 
 @pytest.mark.parametrize('endpoint, expected_message', [
     ('/dep', 'Dependency parsing failed'),
