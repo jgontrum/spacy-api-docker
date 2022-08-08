@@ -11,7 +11,7 @@ import spacy.util
 from .parse import Parse, Entities, Sentences, SentencesDependencies
 
 
-MODELS = os.getenv("languages", "").split()
+MODELS = os.getenv("languages", os.getenv("LANGUAGES", "")).split()
 
 _models = {}
 
@@ -212,12 +212,3 @@ class SentsDepResources(object):
                 'Sentence tokenization and Dependency parsing failed',
                 '{}'.format(e))
 
-
-APP = falcon.API()
-APP.add_route('/dep', DepResource())
-APP.add_route('/ent', EntResource())
-APP.add_route('/sents', SentsResources())
-APP.add_route('/sents_dep', SentsDepResources())
-APP.add_route('/{model_name}/schema', SchemaResource())
-APP.add_route('/models', ModelsResource())
-APP.add_route('/version', VersionResource())
