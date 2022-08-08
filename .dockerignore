@@ -9,4 +9,3 @@ env
 !README.md
 coverage.xml
 .coverage
-frontend/node_modules
