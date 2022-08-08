@@ -9,3 +9,6 @@ env
 !README.md
 coverage.xml
 .coverage
+.pytest_cache
+displacy_service_tests
+docker
