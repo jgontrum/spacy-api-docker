@@ -1,8 +1,14 @@
-.PHONY: clean start build-and-push test
+.PHONY: clean start test poetry
 
 PYTHON3=python3.8
 
 all: env/bin/python
+
+poetry:
+	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+
+requirements.txt:
+	poetry export -f requirements.txt --output requirements.txt --without-hashes
 
 env/bin/python:
 	$(PYTHON3) -m venv env
@@ -18,6 +24,7 @@ clean:
 	find . -name '*.pyo' -exec rm -fv {} \;
 	find . -depth -name '*.egg-info' -exec rm -rfv {} \;
 	find . -depth -name '__pycache__' -exec rm -rfv {} \;
+	rm requirements.txt
 
 test: env/bin/python
 	languages=en env/bin/download_models

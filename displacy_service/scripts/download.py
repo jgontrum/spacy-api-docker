@@ -11,5 +11,5 @@ def download_models():
     print("Done!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     download_models()

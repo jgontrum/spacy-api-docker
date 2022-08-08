@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import falcon
 import spacy
 import json
@@ -13,6 +12,7 @@ from .parse import Parse, Entities, Sentences, SentencesDependencies
 
 MODELS = os.getenv("languages", os.getenv("LANGUAGES", "")).split()
 
+DEFAULT_MODEL = MODELS[0] if MODELS else "en"
 _models = {}
 
 
@@ -23,7 +23,7 @@ def get_model(model_name):
 
 
 def get_dep_types(model):
-    '''List the available dep labels in the model.'''
+    """List the available dep labels in the model."""
     labels = []
     for label_id in model.parser.moves.freqs[DEP]:
         labels.append(model.vocab.strings[label_id])
@@ -31,7 +31,7 @@ def get_dep_types(model):
 
 
 def get_ent_types(model):
-    '''List the available entity types in the model.'''
+    """List the available entity types in the model."""
     labels = []
     for label_id in model.entity.moves.freqs[ENT_TYPE]:
         labels.append(model.vocab.strings[label_id])
@@ -39,14 +39,14 @@ def get_ent_types(model):
 
 
 def get_pos_types(model):
-    '''List the available part-of-speech tags in the model.'''
+    """List the available part-of-speech tags in the model."""
     labels = []
     for label_id in model.tagger.moves.freqs[TAG]:
         labels.append(model.vocab.strings[label_id])
     return labels
 
 
-class ModelsResource(object):
+class ModelsResource:
     """List the available models.
 
     test with: curl -s localhost:8000/models
@@ -56,16 +56,16 @@ class ModelsResource(object):
         try:
             output = list(MODELS)
             resp.body = json.dumps(output, sort_keys=True, indent=2)
-            resp.content_type = 'text/string'
-            resp.append_header('Access-Control-Allow-Origin', "*")
+            resp.content_type = "text/string"
+            resp.append_header("Access-Control-Allow-Origin", "*")
             resp.status = falcon.HTTP_200
         except Exception as e:
             raise falcon.HTTPInternalServerError(
-                'Models retrieval failed',
-                '{}'.format(e))
+                "Models retrieval failed", "{}".format(e)
+            )
 
 
-class VersionResource(object):
+class VersionResource:
     """Return the used spacy / api version
 
     test with: curl -s localhost:8000/version
@@ -73,19 +73,19 @@ class VersionResource(object):
 
     def on_get(self, req, resp):
         try:
-            resp.body = json.dumps({
-                "spacy": spacy.about.__version__
-            }, sort_keys=True, indent=2)
-            resp.content_type = 'text/string'
-            resp.append_header('Access-Control-Allow-Origin', "*")
+            resp.body = json.dumps(
+                {"spacy": spacy.about.__version__}, sort_keys=True, indent=2
+            )
+            resp.content_type = "text/string"
+            resp.append_header("Access-Control-Allow-Origin", "*")
             resp.status = falcon.HTTP_200
         except Exception as e:
             raise falcon.HTTPInternalServerError(
-                'Version retrieval failed',
-                '{}'.format(e))
+                "Version retrieval failed", "{}".format(e)
+            )
 
 
-class SchemaResource(object):
+class SchemaResource:
     """Describe the annotation scheme of a model.
 
     This does not appear to work with later spacy
@@ -96,22 +96,20 @@ class SchemaResource(object):
         try:
             model = get_model(model_name)
             output = {
-                'dep_types': get_dep_types(model),
-                'ent_types': get_ent_types(model),
-                'pos_types': get_pos_types(model)
+                "dep_types": get_dep_types(model),
+                "ent_types": get_ent_types(model),
+                "pos_types": get_pos_types(model),
             }
 
             resp.body = json.dumps(output, sort_keys=True, indent=2)
-            resp.content_type = 'text/string'
-            resp.append_header('Access-Control-Allow-Origin', "*")
+            resp.content_type = "text/string"
+            resp.append_header("Access-Control-Allow-Origin", "*")
             resp.status = falcon.HTTP_200
         except Exception as e:
-            raise falcon.HTTPBadRequest(
-                'Schema construction failed',
-                '{}'.format(e))
+            raise falcon.HTTPBadRequest("Schema construction failed", "{}".format(e))
 
 
-class DepResource(object):
+class DepResource:
     """Parse text and return displacy's expected JSON output.
 
     test with: curl -s localhost:8000/dep -d '{"text":"Pastafarians are smarter than people with Coca Cola bottles."}'
@@ -119,96 +117,87 @@ class DepResource(object):
 
     def on_post(self, req, resp):
         req_body = req.bounded_stream.read()
-        json_data = json.loads(req_body.decode('utf8'))
-        text = json_data.get('text')
-        model_name = json_data.get('model', 'en')
-        collapse_punctuation = json_data.get('collapse_punctuation', True)
-        collapse_phrases = json_data.get('collapse_phrases', True)
+        json_data = json.loads(req_body.decode("utf8"))
+        text = json_data.get("text")
+        model_name = json_data.get("model", DEFAULT_MODEL)
+        collapse_punctuation = json_data.get("collapse_punctuation", True)
+        collapse_phrases = json_data.get("collapse_phrases", True)
 
         try:
             model = get_model(model_name)
             parse = Parse(model, text, collapse_punctuation, collapse_phrases)
             resp.body = json.dumps(parse.to_json(), sort_keys=True, indent=2)
-            resp.content_type = 'text/string'
-            resp.append_header('Access-Control-Allow-Origin', "*")
+            resp.content_type = "text/string"
+            resp.append_header("Access-Control-Allow-Origin", "*")
             resp.status = falcon.HTTP_200
         except Exception as e:
-            raise falcon.HTTPBadRequest(
-                'Dependency parsing failed',
-                '{}'.format(e))
+            raise falcon.HTTPBadRequest("Dependency parsing failed", "{}".format(e))
 
 
-class EntResource(object):
+class EntResource:
     """Parse text and return displaCy ent's expected output."""
 
     def on_post(self, req, resp):
         req_body = req.bounded_stream.read()
-        json_data = json.loads(req_body.decode('utf8'))
-        text = json_data.get('text')
-        model_name = json_data.get('model', 'en')
+        json_data = json.loads(req_body.decode("utf8"))
+        text = json_data.get("text")
+        model_name = json_data.get("model", DEFAULT_MODEL)
         try:
             model = get_model(model_name)
             entities = Entities(model, text)
-            resp.body = json.dumps(entities.to_json(), sort_keys=True,
-                                   indent=2)
-            resp.content_type = 'text/string'
-            resp.append_header('Access-Control-Allow-Origin', "*")
+            resp.body = json.dumps(entities.to_json(), sort_keys=True, indent=2)
+            resp.content_type = "text/string"
+            resp.append_header("Access-Control-Allow-Origin", "*")
             resp.status = falcon.HTTP_200
         except Exception as e:
-            raise falcon.HTTPBadRequest(
-                'Text parsing failed',
-                '{}'.format(e))
+            raise falcon.HTTPBadRequest("Text parsing failed", "{}".format(e))
 
 
-class SentsResources(object):
+class SentsResources:
     """Returns sentences"""
 
     def on_post(self, req, resp):
         req_body = req.bounded_stream.read()
-        json_data = json.loads(req_body.decode('utf8'))
-        text = json_data.get('text')
-        model_name = json_data.get('model', 'en')
+        json_data = json.loads(req_body.decode("utf8"))
+        text = json_data.get("text")
+        model_name = json_data.get("model", DEFAULT_MODEL)
 
         try:
             model = get_model(model_name)
             sentences = Sentences(model, text)
-            resp.body = json.dumps(sentences.to_json(), sort_keys=True,
-                                   indent=2)
-            resp.content_type = 'text/string'
-            resp.append_header('Access-Control-Allow-Origin', "*")
+            resp.body = json.dumps(sentences.to_json(), sort_keys=True, indent=2)
+            resp.content_type = "text/string"
+            resp.append_header("Access-Control-Allow-Origin", "*")
             resp.status = falcon.HTTP_200
         except Exception as e:
-            raise falcon.HTTPBadRequest(
-                'Sentence tokenization failed',
-                '{}'.format(e))
+            raise falcon.HTTPBadRequest("Sentence tokenization failed", "{}".format(e))
 
 
-class SentsDepResources(object):
+class SentsDepResources:
     """Returns sentences and dependency parses"""
 
     def on_post(self, req, resp):
         req_body = req.bounded_stream.read()
-        json_data = json.loads(req_body.decode('utf8'))
-        text = json_data.get('text')
-        model_name = json_data.get('model', 'en')
-        collapse_punctuation = json_data.get('collapse_punctuation', False)
-        collapse_phrases = json_data.get('collapse_phrases', False)
+        json_data = json.loads(req_body.decode("utf8"))
+        text = json_data.get("text")
+        model_name = json_data.get("model", DEFAULT_MODEL)
+        collapse_punctuation = json_data.get("collapse_punctuation", False)
+        collapse_phrases = json_data.get("collapse_phrases", False)
 
         try:
             model = get_model(model_name)
-            sentences = SentencesDependencies(model,
-                                              text,
-                                              collapse_punctuation=collapse_punctuation,
-                                              collapse_phrases=collapse_phrases)
+            sentences = SentencesDependencies(
+                model,
+                text,
+                collapse_punctuation=collapse_punctuation,
+                collapse_phrases=collapse_phrases,
+            )
 
-            resp.body = json.dumps(sentences.to_json(),
-                                   sort_keys=True,
-                                   indent=2)
-            resp.content_type = 'text/string'
-            resp.append_header('Access-Control-Allow-Origin', "*")
+            resp.body = json.dumps(sentences.to_json(), sort_keys=True, indent=2)
+            resp.content_type = "text/string"
+            resp.append_header("Access-Control-Allow-Origin", "*")
             resp.status = falcon.HTTP_200
         except Exception as e:
             raise falcon.HTTPBadRequest(
-                'Sentence tokenization and Dependency parsing failed',
-                '{}'.format(e))
-
+                "Sentence tokenization and Dependency parsing failed", "{}".format(e)
+            )
