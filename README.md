@@ -2,22 +2,14 @@
 
 **Ready-to-use Docker images for the [spaCy NLP library](https://github.com/explosion/spaCy).**
 
----
-**[spaCy API Docker](https://github.com/jgontrum/spacy-api-docker) is being sponsored by the following tool; please help to support us by taking a look and signing up to a free trial**
-
-
-[<img src="https://images.gitads.io/spacy-api-docker" alt="GitAds"/>](https://tracking.gitads.io/?repo=spacy-api-docker)
----
-
 ### Features
 
 - Use the awesome spaCy NLP framework with other programming languages.
 - Better scaling: One NLP - multiple services.
 - Build using the official [spaCy REST services](https://github.com/explosion/spacy-services).
-- Dependency parsing visualisation with [displaCy](https://demos.explosion.ai/displacy/).
 - Docker images for **English**, **German**, **Spanish**, **Italian**, **Dutch** and **French**.
 - Automated builds to stay up to date with spaCy.
-- Current spaCy version: 2.0.16
+- Current spaCy version: 3.4
 
 Please note that this is a completely new API and is incompatible with the previous one. If you still need them, use `jgontrum/spacyapi:en-legacy` or `jgontrum/spacyapi:de-legacy`.
 
@@ -25,10 +17,20 @@ _Documentation, API- and frontend code based upon [spaCy REST services](https://
 
 ---
 
+## Sponsor
+
+
+[![frogs42](https://media-exp1.licdn.com/dms/image/C4D0BAQHnWofEAF6Lcw/company-logo_200_200/0/1620397630915?e=2147483647&v=beta&t=TZ7FsAEgasBNM4p29BRZgLiVQ8h81rCzQ2iTfbhJW2w)](https://www.frogs42.com/)
+
+Thanks to [frogs42](https://www.frogs42.com/) for sponsoring this project.
+
+---
+
 ## Images
 
 | Image                       | Description                                                       |
 | --------------------------- | ----------------------------------------------------------------- |
+| _OLD RELEASES_              |                                                                   |
 | jgontrum/spacyapi:base_v2   | Base image for spaCy 2.0, containing no language model            |
 | jgontrum/spacyapi:en_v2     | English language model, spaCy 2.0                                 |
 | jgontrum/spacyapi:de_v2     | German language model, spaCy 2.0                                  |
@@ -38,7 +40,6 @@ _Documentation, API- and frontend code based upon [spaCy REST services](https://
 | jgontrum/spacyapi:it_v2     | Italian language model, spaCy 2.0                                 |
 | jgontrum/spacyapi:nl_v2     | Dutch language model, spaCy 2.0                                   |
 | jgontrum/spacyapi:all_v2    | Contains EN, DE, ES, PT, NL, IT and FR language models, spaCy 2.0 |
-| _OLD RELEASES_              |                                                                   |
 | jgontrum/spacyapi:base      | Base image, containing no language model                          |
 | jgontrum/spacyapi:latest    | English language model                                            |
 | jgontrum/spacyapi:en        | English language model                                            |
@@ -53,12 +54,10 @@ _Documentation, API- and frontend code based upon [spaCy REST services](https://
 
 ## Usage
 
-`docker run -p "127.0.0.1:8080:80" jgontrum/spacyapi:en_v2`
+`docker run -p "127.0.0.1:8080:80" jgontrum/spacyapi:en_v3`
 
 All models are loaded at start up time. Depending on the model size and server
 performance, this can take a few minutes.
-
-The displaCy frontend is available at `/ui`.
 
 ### Docker Compose
 
@@ -67,44 +66,17 @@ version: '2'
 
 services:
   spacyapi:
-    image: jgontrum/spacyapi:en_v2
+    image: jgontrum/spacyapi:en_v3
     ports:
       - "127.0.0.1:8080:80"
     restart: always
 
 ```
 
-### Running Tests
-
-In order to run unit tests locally `pytest` is included.
-
-`docker run -it jgontrum/spacyapi:en_v2 app/env/bin/pytest app/displacy_service_tests`
-
-### Special Cases
-
-The API includes rudimentary support for specifying [special cases](https://spacy.io/usage/linguistic-features#special-cases)
-for your deployment. Currently only basic special cases are supported; for example, in the spaCy parlance:
-
-```python
-tokenizer.add_special_case("isn't", [{ORTH: "isn't"}])
-```
-
-They can be supplied in an environment variable corresponding to the desired language model. For example, `en_special_cases`
-or `en_core_web_lg_special_cases`. They are configured as a single comma-delimited string, such as `"isn't,doesn't,won't"`.
-
-Use the following syntax to specify basic special case rules, such as for preserving contractions:
-
-`docker run -p "127.0.0.1:8080:80" -e en_special_cases="isn't,doesn't" jgontrum/spacyapi:en_v2`
-
-You can also configure this in a `.env` file if using `docker-compose` as above.
 
 ---
 
 ## REST API Documentation
-
-### `GET` `/ui/`
-
-displaCy frontend is available here.
 
 ---
 
@@ -115,7 +87,7 @@ Example request:
 ```json
 {
   "text": "They ate the pizza with anchovies",
-  "model": "en",
+  "model": "en_core_web_sm",
   "collapse_punctuation": 0,
   "collapse_phrases": 1
 }
@@ -137,7 +109,7 @@ import requests
 url = "http://localhost:8000/dep"
 message_text = "They ate the pizza with anchovies"
 headers = {'content-type': 'application/json'}
-d = {'text': message_text, 'model': 'en'}
+d = {'text': message_text, 'model': 'en_core_web_sm'}
 
 response = requests.post(url, data=json.dumps(d), headers=headers)
 r = response.json()
@@ -180,7 +152,7 @@ Example response:
 Curl command:
 
 ```
-curl -s localhost:8000/dep -d '{"text":"Pastafarians are smarter than people with Coca Cola bottles.", "model":"en"}'
+curl -s localhost:8000/dep -d '{"text":"Pastafarians are smarter than people with Coca Cola bottles.", "model":"en_core_web_sm"}'
 ```
 
 ```json
@@ -265,7 +237,7 @@ Example request:
 ```json
 {
   "text": "When Sebastian Thrun started working on self-driving cars at Google in 2007, few people outside of the company took him seriously.",
-  "model": "en"
+  "model": "en_core_web_sm"
 }
 ```
 
@@ -283,7 +255,7 @@ import requests
 url = "http://localhost:8000/ent"
 message_text = "When Sebastian Thrun started working on self-driving cars at Google in 2007, few people outside of the company took him seriously."
 headers = {'content-type': 'application/json'}
-d = {'text': message_text, 'model': 'en'}
+d = {'text': message_text, 'model': 'en_core_web_sm'}
 
 response = requests.post(url, data=json.dumps(d), headers=headers)
 r = response.json()
@@ -306,7 +278,7 @@ Example response:
 | `type`  | string  | entity type                                |
 
 ```
-curl -s localhost:8000/ent -d '{"text":"Pastafarians are smarter than people with Coca Cola bottles.", "model":"en"}'
+curl -s localhost:8000/ent -d '{"text":"Pastafarians are smarter than people with Coca Cola bottles.", "model":"en_core_web_sm"}'
 ```
 
 ```json
@@ -335,7 +307,7 @@ Example request:
 ```json
 {
   "text": "In 2012 I was a mediocre developer. But today I am at least a bit better.",
-  "model": "en"
+  "model": "en_core_web_sm"
 }
 ```
 
@@ -353,7 +325,7 @@ import requests
 url = "http://localhost:8000/sents"
 message_text = "In 2012 I was a mediocre developer. But today I am at least a bit better."
 headers = {'content-type': 'application/json'}
-d = {'text': message_text, 'model': 'en'}
+d = {'text': message_text, 'model': 'en_core_web_sm'}
 
 response = requests.post(url, data=json.dumps(d), headers=headers)
 r = response.json()
@@ -376,7 +348,7 @@ Example request:
 ```json
 {
   "text": "In 2012 I was a mediocre developer. But today I am at least a bit better.",
-  "model": "en"
+  "model": "en_core_web_sm"
 }
 ```
 
@@ -394,7 +366,7 @@ import requests
 url = "http://localhost:8000/sents_dep"
 message_text = "In 2012 I was a mediocre developer. But today I am at least a bit better."
 headers = {'content-type': 'application/json'}
-d = {'text': message_text, 'model': 'en'}
+d = {'text': message_text, 'model': 'en_core_web_sm'}
 
 response = requests.post(url, data=json.dumps(d), headers=headers)
 r = response.json()
@@ -622,7 +594,7 @@ GET /models
 Example response:
 
 ```json
-["en", "de"]
+["en_core_web_sm"]
 ```
 
 ---
@@ -665,6 +637,6 @@ Example response:
 
 ```json
 {
-  "spacy": "2.2.4"
+  "spacy": "3.4"
 }
 ```
